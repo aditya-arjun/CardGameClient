@@ -15,7 +15,6 @@ class Room:
         self.players_list = []
         self.card_list = {}
         # Generate card list, initialized to the (originX, originY) position of the board.
-        # We also need to set the depth of all the cards
         card_ids = [element for element in itertools.product(CARD_TYPE,CARD_SUIT)]
 
         # Add the jokers if there are jokers
@@ -26,7 +25,6 @@ class Room:
         for card_name,card_suit in card_ids:
             card = Card(card_name+card_suit,originX,originY,False)
             self.card_list[card.name] = card
-            print('{} {} {}'.format(card.name,card.x,card.y))
 
     def enter_room(self, player):
         """Add a player to the room"""
@@ -49,11 +47,6 @@ class Room:
         """Return a list of the cards in the room"""
         for card_name,card in card_list:
             yield card
-
-    def to_front(self,cardname):
-        """Place a card at the front"""
-        self.card_list[cardname].depth = self.depth_counter
-        depth_counter = depth_counter+1
     
     def change_card(self, card):
         """Change the state of a card"""

@@ -26,5 +26,13 @@ def on_create(data):
     join_room(room)
     emit('join_room', {'room' : room})
 
+@socketio.on('join_room')
+def on_join(data):
+    room_id = data['room']
+    if room_id in rooms.keys():
+        join_room(room_id)
+    else:
+        emit('error', {'error' : f'Room {room_id} passed does not exist'})
+
 if __name__ == '__main__':
     socketio.run(app, debug=True)

@@ -1,5 +1,6 @@
 
 CARD_TYPE = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
+CARD_SUIT = ['C','D','H','S']
 
 class Card: 
     def __init__(self, name, x, y, face_up=False, depth=0, owner=None):

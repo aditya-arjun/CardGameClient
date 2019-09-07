@@ -1,7 +1,6 @@
 
 class Player:
-    def __init__(self, session_id, username):
-        self.session_id = session_id
+    def __init__(self, username):
         self.username = username
         self.card_list = []
     

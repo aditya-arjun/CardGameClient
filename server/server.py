@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, send_from_directory
+from flask import Flask, render_template, redirect, url_for, send_from_directory, session
 from flask_socketio  import SocketIO, join_room, leave_room, send, emit
 from objects import Card, Player, Room
 import random
@@ -10,9 +10,18 @@ rooms = {}
 
 @app.route('/game')
 def game():
-    print(url_for('game'))
     return render_template('game.html')
-    # return send_from_directory('','game.html')
+
+@app.route('/<int:room_id>')
+def render_room():
+    if 'player' not in session:
+        return 'hello'
+    return 'bye'
+
+@app.route('/register')
+def register():
+    return 'lol'
+
 
 def generate_room_id():
     """ Generate ID for room """

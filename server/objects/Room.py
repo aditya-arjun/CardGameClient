@@ -1,7 +1,7 @@
 import itertools
 import random
-from Card import Card,CARD_SUIT,CARD_TYPE
-from Player import Player
+from objects.Card import Card,CARD_SUIT,CARD_TYPE
+from objects.Player import Player
 
 class Room:
     """ Represents a Game room.

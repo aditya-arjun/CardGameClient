@@ -21,7 +21,7 @@ def generate_room_id():
 def on_create(data):
     ''' Creates game lobby '''
     game_id = generate_room_id()
-    room = Room()
+    room = Room(room_id=game_id)
     rooms[game_id] = room
     join_room(room)
     emit('join_room', {'room' : room})

@@ -16,19 +16,12 @@ def index():
 def game():
     return render_template('game.html')
 
-<<<<<<< HEAD
-@app.route('/<int:room_id>')
-def render_room():
-    if 'player' not in session:
-        return 'hello'
-    return 'bye'
-=======
+
 @app.route('/<string:room_id>')
 def render_room(room_id):
     if room_id in rooms:
         return rooms[room_id]
     return redirect(url_for('index'))
->>>>>>> bbca6cb3e6079d18bb5d750b08343b4eafb19ae3
 
 def generate_room_id():
     ''' Generate ID for room '''
@@ -58,6 +51,7 @@ def on_create(data):
     rooms[game_id] = room
     join_room(room)
     emit('join_room', {'room' : room})
+    return redirect(f'/{game_id}')
 
 @socketio.on('join_room')
 def on_join(data):

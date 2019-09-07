@@ -6,6 +6,7 @@ let scalingRatio = 1;
 // cardDict
 let cardDict = {};
 let playerDict = {};
+let cardOwners = {}
 let username;
 let currentCard = null;
 
@@ -101,13 +102,32 @@ function getAllPlayers() {
     return players;
 }
 
+function initializePositions(num, length) {
+    partitions = num+1;
+    positions = [];
+    for (let i = 1; i < partitions; i++) {
+        positions.push(i/partitions * length);
+    }
+    return positions;
+}
+
 function initializePlayers() {
     let players = getAllPlayers();
-    for (let player of players) {
+    let positions = initializePositions(players.length, 1000);
+    for (let i = 0; i < players.length; i++) {
+        let player = players[i];
         let playerContainer = new createjs.Container();
+        playerContainer.x = positions[i];
+        playerContainer.y = 70;
         let playerShape = new createjs.Shape();
-        playerShape.graphics.beginFill("#FFFFE0").drawEllipse(300, 300, 150, 150);
+        playerShape.graphics.beginFill("#FFFFE0").drawEllipse(0, 0, 150, 150);
         playerContainer.addChild(playerShape);
+        let playerName = new createjs.Text(player, "20px Arial");
+        let playerCardCount = new createjs.Text("0", "20px Arial");
+        playerCardCount.y = 30;
+        playerCardCount.name = "count";
+        playerContainer.addChild(playerName, playerCardCount);
+        playerDict[player] = playerContainer;
         stage.addChild(playerContainer);
     }
     stage.update();
@@ -146,7 +166,6 @@ function initializeCards(initialCards) {
         let isDragging = false;
         cardContainer.on("click", e => {
             if (isDragging) return;
-            
             sendBringFront(card.name);
             sendFlipCard(card.name);
             stage.update();
@@ -157,13 +176,13 @@ function initializeCards(initialCards) {
             mouseX = event.stageX / scalingRatio;
             mouseY = event.stageY / scalingRatio;
             // bring to front
-            sendBringFront(card.name);
+            receiveBringFront(card.name);
             sendMoveCard(card.name, mouseX, mouseY);
-
             // make sure to redraw the stage to show the change:
             stage.update();
         });
         cardContainer.on("pressup", e => {
+            sendBringFront(card.name);
             isDragging = false;
             currentCard = null;
             
@@ -171,6 +190,7 @@ function initializeCards(initialCards) {
         cardContainer.mouseChildren = false;
         stage.addChild(cardContainer);
         cardDict[card.name] = cardContainer;
+        cardOwners[card.name] = null;
     }
     stage.update();
 }
@@ -241,13 +261,9 @@ function handleFileComplete(initialCards) {
 
     let personalArea = new createjs.Shape();
     personalArea.graphics.beginFill("#FFFFE0").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.7, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.25, 15);
-    stage.addChild(personalArea);
-/*
-    
-  */  
+    stage.addChild(personalArea); 
     let players = getAllPlayers();
 
-    
     stage.on("stagemouseup", e => {
         let newOwner = null;
         if (currentCard != null) {
@@ -262,13 +278,10 @@ function handleFileComplete(initialCards) {
                     newOwner = player;
                 }
             }
-            sendChangeOwner(currentCard, newOwner);
-            
+            sendChangeOwner(currentCard, newOwner); 
         }
     });
-    
     stage.update();
-
 }
 
 function sendChangeOwner(cardName, newOwner) {
@@ -278,11 +291,20 @@ function sendChangeOwner(cardName, newOwner) {
 
 function receiveChangeOwner(cardName, newOwner) {
     console.log(cardName + "new owner:" + newOwner);
+    if (cardOwners[cardName] != null) {
+        let owner = cardOwners[cardName];
+        let count = playerDict[owner].getChildByName("count");
+        playerDict[owner].getChildByName("count") = Number(count)-1;
+    }
+    cardOwners[cardName] = newOwner;
     if (newOwner == null) {
         cardDict[cardName].visible = true;
     }
     else if (username != newOwner) {
         cardDict[cardName].visible = false;
+        let owner = newOwner;
+        let count = playerDict[owner].getChildByName("count");
+        playerDict[owner].getChildByName("count") = Number(count)+1;
     }
     else {
         // what happens if i'm the new owner

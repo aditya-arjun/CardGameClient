@@ -3,10 +3,9 @@ let stage;
 let preloader;
 // for keeping track of scaling ratio in makeResponsive;
 let scalingRatio = 1;
-// dict
-let dict = {};
-// over personal area
-let isOverPersonalArea = false;
+// cardDict
+let cardDict = {};
+let playerDict = {};
 let username;
 let currentCard = null;
 
@@ -95,7 +94,20 @@ function getInitialCards() {
 // }
 
 function getAllPlayers() {
-    return ["bob"];
+    let players =  ["Richard Guo", "bob"];
+    return players;
+}
+
+function initializePlayers() {
+    let players = getAllPlayers();
+    for (let player of players) {
+        let playerContainer = new createjs.Container();
+        let playerShape = new createjs.Shape();
+        playerShape.graphics.beginFill("#FFFFE0").drawEllipse(300, 300, 150, 150);
+        playerContainer.addChild(playerShape);
+        stage.addChild(playerContainer);
+    }
+    stage.update();
 }
 
 function initializeImages(initialCards) {
@@ -151,15 +163,11 @@ function initializeCards(initialCards) {
         cardContainer.on("pressup", e => {
             isDragging = false;
             currentCard = null;
-            /*
-            if (isOverPersonalArea) {
-                sendChangeOwner(card.name, username);
-            }*/
             
         });
         cardContainer.mouseChildren = false;
         stage.addChild(cardContainer);
-        dict[card.name] = cardContainer;
+        cardDict[card.name] = cardContainer;
     }
     stage.update();
 }
@@ -172,6 +180,7 @@ function init() {
     preloader.loadManifest(initializeImages(initialCards));
     preloader.on("complete", e => handleFileComplete(initialCards));
     username = getUserName();
+    initializePlayers();
 
     function makeResponsive(isResp, respDim, isScale, scaleType) {
         let can = document.getElementById("canvas");
@@ -229,31 +238,29 @@ function handleFileComplete(initialCards) {
 
     let personalArea = new createjs.Shape();
     personalArea.graphics.beginFill("#FFFFE0").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.7, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.25, 15);
-    personalArea.on("mouseover", e => {
-        isOverPersonalArea = true;
-        console.log(isOverPersonalArea);
-    });
-    personalArea.on("mouseout", e => {
-        isOverPersonalArea = false;
-    });
     stage.addChild(personalArea);
 /*
-    let player = new createjs.Shape();
-    player.graphics.beginFill("#FFFFE0").drawEllipse(300, 300, 50, 50);
+    
   */  
     let players = getAllPlayers();
 
     
     stage.on("stagemouseup", e => {
+        let newOwner = null;
         if (currentCard != null) {
             let mouseX = e.stageX / scalingRatio;
             let mouseY = e.stageY / scalingRatio;
             if (personalArea.hitTest(mouseX, mouseY)) {
-                sendChangeOwner(currentCard, username);
+                newOwner = username;
             }
-            else {
-                sendChangeOwner(currentCard, null);
+            for (let player of players) {
+                if (player == username) continue;
+                if (playerDict[player].hitTest(mouseX, mouseY)) {
+                    newOwner = player;
+                }
             }
+            sendChangeOwner(currentCard, newOwner);
+            
         }
     });
     
@@ -268,10 +275,10 @@ function sendChangeOwner(cardName, newOwner) {
 function receiveChangeOwner(cardName, newOwner) {
     console.log(cardName + "new owner:" + newOwner);
     if (newOwner == null) {
-        dict[cardName].visible = true;
+        cardDict[cardName].visible = true;
     }
     else if (username != newOwner) {
-        dict[cardName].visible = false;
+        cardDict[cardName].visible = false;
     }
     else {
         // what happens if i'm the new owner
@@ -296,13 +303,13 @@ function sendMoveCard(cardName, newX, newY) {
 
 // @aditya call this
 function receiveBringFront(cardName) {
-    stage.setChildIndex(dict[cardName], stage.numChildren-1);
+    stage.setChildIndex(cardDict[cardName], stage.numChildren-1);
     stage.update();
 }
 
 // @aditya call this
 function receiveFlipCard(cardName) {
-    let cardContainer = dict[cardName];
+    let cardContainer = cardDict[cardName];
     let nextImage;
     if (cardContainer.faceUp) {
         nextImage = new createjs.Bitmap(preloader.getResult("cardback"));
@@ -320,7 +327,7 @@ function receiveFlipCard(cardName) {
 
 // @aditya call this
 function receiveMoveCard(cardName, newX, newY) {
-    let cardContainer = dict[cardName];
+    let cardContainer = cardDict[cardName];
     cardContainer.x = newX;
     cardContainer.y = newY;
     stage.update();

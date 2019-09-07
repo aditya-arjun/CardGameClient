@@ -25,7 +25,7 @@ function checkSetup() {
 }
 
 // Checks that Firebase has been imported.
-checkSetup();
+//checkSetup();
 
 // Shortcuts to DOM Elements.
 var userPicElement = document.getElementById('user-pic');

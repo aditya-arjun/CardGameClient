@@ -5,6 +5,10 @@ let preloader;
 let scalingRatio = 1;
 // dict
 let dict = {};
+// over personal area
+let isOverPersonalArea = false;
+let username;
+let currentCard = null;
 
 // calculuate the pixel ratio of the screen
 const PIXEL_RATIO = (function () {
@@ -86,6 +90,14 @@ function getInitialCards() {
     }]
 }
 
+function getUsername() {
+    return "richardg";
+}
+
+function getAllPlayers() {
+    return ["bob"];
+}
+
 function initializeImages(initialCards) {
     sources = [];
     // add card back
@@ -126,6 +138,7 @@ function initializeCards(initialCards) {
         });
         cardContainer.on("pressmove", event => {
             isDragging = true;
+            currentCard = card.name;
             mouseX = event.stageX / scalingRatio;
             mouseY = event.stageY / scalingRatio;
             // bring to front
@@ -137,6 +150,12 @@ function initializeCards(initialCards) {
         });
         cardContainer.on("pressup", e => {
             isDragging = false;
+            currentCard = null;
+            /*
+            if (isOverPersonalArea) {
+                sendChangeOwner(card.name, username);
+            }*/
+            
         });
         cardContainer.mouseChildren = false;
         stage.addChild(cardContainer);
@@ -152,6 +171,7 @@ function init() {
     let initialCards = getInitialCards();
     preloader.loadManifest(initializeImages(initialCards));
     preloader.on("complete", e => handleFileComplete(initialCards));
+    username = getUsername();
 
     function makeResponsive(isResp, respDim, isScale, scaleType) {
         let can = document.getElementById("canvas");
@@ -209,12 +229,53 @@ function handleFileComplete(initialCards) {
 
     let personalArea = new createjs.Shape();
     personalArea.graphics.beginFill("#FFFFE0").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.7, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.25, 15);
-    
+    personalArea.on("mouseover", e => {
+        isOverPersonalArea = true;
+        console.log(isOverPersonalArea);
+    });
+    personalArea.on("mouseout", e => {
+        isOverPersonalArea = false;
+    });
     stage.addChild(personalArea);
+/*
+    let player = new createjs.Shape();
+    player.graphics.beginFill("#FFFFE0").drawEllipse(300, 300, 50, 50);
+  */  
+    let players = getAllPlayers();
+
     
+    stage.on("stagemouseup", e => {
+        if (currentCard != null) {
+            let mouseX = e.stageX / scalingRatio;
+            let mouseY = e.stageY / scalingRatio;
+            if (personalArea.hitTest(mouseX, mouseY)) {
+                sendChangeOwner(currentCard, username);
+            }
+            else {
+                sendChangeOwner(currentCard, null);
+            }
+        }
+    });
     
     stage.update();
 
+}
+
+function sendChangeOwner(cardName, newOwner) {
+    receiveChangeOwner(cardName, newOwner);
+}
+
+function receiveChangeOwner(cardName, newOwner) {
+    console.log(cardName + "new owner:" + newOwner);
+    if (newOwner == null) {
+        dict[cardName].visible = true;
+    }
+    else if (username != newOwner) {
+        dict[cardName].visible = false;
+    }
+    else {
+        // what happens if i'm the new owner
+    }
 }
 
 // Server commands

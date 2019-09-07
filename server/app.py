@@ -22,19 +22,25 @@ def render_room():
         return 'hello'
     return 'bye'
 
-@app.route('/register')
-def register():
-    return 'lol'
-
-
 def generate_room_id():
-    """ Generate ID for room """
+    ''' Generate ID for room '''
     id_length = 6
     while True:
         id_tmp = ''.join(random.SystemRandom().choice(string.ascii_uppercase) for _ in range(id_length))
         conflict = id_tmp in rooms.keys()
         if not conflict:
             return id_tmp
+
+@socketio.on('card-flip')
+def on_card_flip(data):
+    ''' Flips card '''
+    card_id = data['card_name']
+    room = get_room(session)
+    room_id = room.room_id
+
+    emit('ca')
+
+
 
 @socketio.on('create')
 def on_create(data):

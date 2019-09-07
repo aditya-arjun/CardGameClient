@@ -45,8 +45,23 @@ def on_join(data):
     room_id = data['room']
     if room_id in rooms.keys():
         join_room(room_id)
+        session['room_id'] = room_id
     else:
         emit('error', {'error' : f'Room {room_id} passed does not exist'})
+
+def get_room(session):
+    return rooms[session['room_id']]
+
+# Stuff with the commands
+
+@socketio.on('cursor')
+def cursor_move():
+    # TODO: implement each player's cursor, then do a broadcast that tells everyone the cursor position
+    
+
+@socketio.on('card_move')
+def card_move(msg):
+    
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

@@ -272,6 +272,7 @@ function handleFileComplete(initialCards) {
 }
 
 function sendChangeOwner(cardName, newOwner) {
+    // puffyfyyyyfyyyfy
     receiveChangeOwner(cardName, newOwner);
 }
 
@@ -291,19 +292,19 @@ function receiveChangeOwner(cardName, newOwner) {
 // Server commands
 function sendBringFront(cardName) {
     // @aditya change this
-    socket.emit('sendFront', {data: cardName});
+    socket.emit('cursor', {data: cardName});
     receiveBringFront(cardName);
 }
 
 function sendFlipCard(cardName) {
     // @aditya change this
-    socket.emit('sendFlipCard', {data: cardName});
+    socket.emit('card_flip', {data: cardName});
     receiveFlipCard(cardName);
 }
 
 function sendMoveCard(cardName, newX, newY) {
     // @aditya change this
-    socket.emit('sendMoveCard', {data: (cardName, newX, newY)})
+    socket.emit('card_move', {data: (cardName, newX, newY)})
     receiveMoveCard(cardName, newX, newY);
 }
 

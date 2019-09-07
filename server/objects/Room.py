@@ -38,17 +38,21 @@ class Room:
 
     def get_id(self):
         """Get the room id"""
-        return room_id
+        return self.room_id
 
     def get_players_list(self):
         """Return a list of players in the room"""
-        for player in players_list:
+        for player in self.players_list:
             yield player
     
     def get_cards_list(self):
         """Return a list of the cards in the room"""
-        for card_name,card in card_list:
+        for card_name,card in self.card_list:
             yield card
+
+    def get_card(self, card_name):
+        """Get a specific card"""
+        return self.card_list[card_name]
     
     def change_card(self, card):
         """Change the state of a card"""

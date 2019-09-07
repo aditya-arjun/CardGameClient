@@ -13,6 +13,7 @@ class Room:
         self.card_list = []
         # TODO: insert code to generate card list, initialized to the center of the board.
         # We also need to set the depth of all the cards
+        
 
     def enter_room(self, player):
         """Add a player to the room"""
@@ -26,9 +27,16 @@ class Room:
         """Get the room id"""
         return room_id
 
-    def get_players(self):
+    def get_players_list(self):
         """Return a list of players in the room"""
-        
+        for player in players_list:
+            yield player
+    
+    def get_cards_list(self):
+        """Return a list of the cards in the room"""
+        for card_name,card in card_list:
+            yield card
     
     def change_card(self, card_id, card):
+        """Change the state of a card"""
         self.card_list[card_id] = card

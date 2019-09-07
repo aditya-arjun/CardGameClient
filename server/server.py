@@ -1,5 +1,6 @@
 from flask import Flask
-from flask_socketio  import SocketIO, join_room, emit
+from flask_socketio  import SocketIO, join_room, leave_room, send, emit
+from objects import Card, Player, Room
 import random
 import string
 
@@ -12,19 +13,18 @@ def generate_room_id():
     id_length = 6
     while True:
         id_tmp = ''.join(random.SystemRandom().choice(string.ascii_uppercase) for _ in range(id_length))
-        conflict = id_tmp in [room.game_id for room in rooms]
+        conflict = id_tmp in rooms.keys()
         if not conflict:
             return id_tmp
 
 @socketio.on('create')
 def on_create(data):
-    print('hello')
+    ''' Creates game lobby '''
+    game_id = generate_room_id()
+    room = Room()
+    rooms[game_id] = room
+    join_room(room)
+    emit('join_room', {'room' : room})
 
-<<<<<<< HEAD
-@socketio.on('message')
-def on_message(data):
-    print('hello')
-=======
-# https://secdevops.ai/weekend-project-part-2-turning-flask-into-a-real-time-websocket-server-using-flask-socketio-ab6b45f1d896
-
->>>>>>> 67768ab90c4fe330a60527d2cf4723e0a76652f2
+if __name__ == '__main__':
+    socketio.run(app, debug=True)

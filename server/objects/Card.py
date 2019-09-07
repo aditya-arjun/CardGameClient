@@ -7,8 +7,6 @@ class Card:
         self.x = x
         self.y = y
         self.face_up = face_up
-        # Higher depth on top
-        self.depth = depth
         self.owner = owner
     
     def flip(self):
@@ -23,6 +21,3 @@ class Card:
             return len(CARD_TYPE)
         
         return CARD_TYPE.index(name[0])
-    
-    def set_depth(self, nxt_depth):
-        self.depth = nxt_depth

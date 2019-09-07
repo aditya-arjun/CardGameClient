@@ -90,6 +90,9 @@ function getInitialCards() {
     }]
 }
 
+// Connect to socket
+var socket = io.connect("http://" + document.domain + ":" + location.port);
+
 // function getUsername() {
 //     return "richardg";
 // }
@@ -282,6 +285,7 @@ function handleFileComplete(initialCards) {
 }
 
 function sendChangeOwner(cardName, newOwner) {
+    // puffyfyyyyfyyyfy
     receiveChangeOwner(cardName, newOwner);
 }
 
@@ -310,16 +314,22 @@ function receiveChangeOwner(cardName, newOwner) {
 // Server commands
 function sendBringFront(cardName) {
     // @aditya change this
+    socket.emit('cursor', {data: cardName});
     receiveBringFront(cardName);
 }
 
 function sendFlipCard(cardName) {
     // @aditya change this
+    socket.emit('card_flip', {data: cardName.val()});
     receiveFlipCard(cardName);
 }
 
 function sendMoveCard(cardName, newX, newY) {
     // @aditya change this
+    socket.emit('card_move', {
+        "cardName":   cardName, 
+        "newX":       newX, 
+        "newY":       newY});
     receiveMoveCard(cardName, newX, newY);
 }
 

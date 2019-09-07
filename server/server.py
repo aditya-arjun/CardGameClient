@@ -4,14 +4,14 @@ from objects import Card, Player, Room
 import random
 import string
 
-app = Flask('card_app', static_url_path='', static_folder='../client')
+app = Flask('card_app', static_url_path='', static_folder='')
 socketio = SocketIO(app)
 rooms = {}
 
 @app.route('/game')
 def game():
-    return render_template(url_for('static', filename='game.html'))
-    #return send_from_directory('/','game.html')
+    # return render_template(url_for('game'))
+    return send_from_directory('/','../client/game.html')
 
 def generate_room_id():
     """ Generate ID for room """

@@ -36,7 +36,7 @@ function extendCardName(card) {
             extendedName += "ace";
             break;
         case 'T':
-            extendedName += "ten";
+            extendedName += "10";
             break;
         case 'J': 
             extendedName += "jack";
@@ -207,6 +207,13 @@ function init() {
 function handleFileComplete(initialCards) {
     initializeCards(initialCards);
 
+    let personalArea = new createjs.Shape();
+    personalArea.graphics.beginFill("#FFFFE0").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.7, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.25, 15);
+    
+    stage.addChild(personalArea);
+    
+    
+    stage.update();
 
 }
 

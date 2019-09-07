@@ -13,7 +13,7 @@ class Room:
     def __init__(self, room_id, originX=0, originY=0, containJokers=False):
         self.room_id = room_id
         self.players_list = []
-        self.card_list = []
+        self.card_list = {}
         # Generate card list, initialized to the (originX, originY) position of the board.
         # We also need to set the depth of all the cards
         self.depth_counter = 54
@@ -28,8 +28,9 @@ class Room:
 
         # Create all the cards
         for i in range(len(depth_list)):
-            card = Card(card_ids[i][0]+card_ids[i][1],originX,originY,depth_list[i])
+            card = Card(card_ids[i][0]+card_ids[i][1],originX,originY,False,depth_list[i])
             self.card_list[card.name] = card
+            print(f'{card.name} {card.x} {card.y} {card.depth}')
 
     def enter_room(self, player):
         """Add a player to the room"""
@@ -52,6 +53,11 @@ class Room:
         """Return a list of the cards in the room"""
         for card_name,card in card_list:
             yield card
+
+    def to_front(self,cardname):
+        """Place a card at the front"""
+        self.card_list[cardname].depth = self.depth_counter
+        depth_counter = depth_counter+1
     
     def change_card(self, card):
         """Change the state of a card"""

@@ -11,6 +11,7 @@ rooms = {}
 @app.route('/game')
 def game():
     return render_template('game.html')
+<<<<<<< HEAD
 
 @app.route('/<int:room_id>')
 def render_room():
@@ -22,6 +23,8 @@ def render_room():
 def register():
     return 'lol'
 
+=======
+>>>>>>> b1351b6ce59f2c5de2326ef407a1d0ef6f0bf869
 
 def generate_room_id():
     """ Generate ID for room """

@@ -272,7 +272,10 @@ function handleFileComplete(initialCards) {
 }
 
 function sendChangeOwner(cardName, newOwner) {
-    // puffyfyyyyfyyyfy
+    socket.emit('transfer',{
+        'cardName': cardName,
+        'newOwner': newOwner
+    });
     receiveChangeOwner(cardName, newOwner);
 }
 
@@ -298,7 +301,7 @@ function sendBringFront(cardName) {
 
 function sendFlipCard(cardName) {
     // @aditya change this
-    socket.emit('card_flip', {data: cardName.val()});
+    socket.emit('card_flip', {'data': cardName});
     receiveFlipCard(cardName);
 }
 

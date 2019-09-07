@@ -55,7 +55,7 @@ def get_room(session):
 # Stuff with the commands
 
 @socketio.on('cursor')
-def cursor_move():
+def cursor_move(msg):
     # TODO: implement each player's cursor, then do a broadcast that tells everyone the cursor position
     room = get_room(session)
 
@@ -64,8 +64,10 @@ def card_move(msg):
     room = get_room(session)
     card = room.get_card(msg['cardName'])
     card.set_position(msg['newX'], msg['newY'])
+    print(msg['cardName'] + ' changed to position: ' + msg['newX'] + ' ' +  msg['newY'])
     room.update_card(card)
     # broadcast new position to all
+    emit('card_move',msg,room=room.room_id)
 
 @socketio.on('transfer')
 def transfer(msg):
@@ -74,6 +76,7 @@ def transfer(msg):
     card.set_owner(msg['newOwner'])
     room.update_card(card)
     # broadcast this information
+    emit('transfer',msg,room=room.room_id)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

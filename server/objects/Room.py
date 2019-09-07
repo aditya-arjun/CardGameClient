@@ -54,6 +54,6 @@ class Room:
         """Get a specific card"""
         return self.card_list[card_name]
     
-    def change_card(self, card):
+    def update_card(self, card):
         """Change the state of a card"""
         self.card_list[card.name] = card

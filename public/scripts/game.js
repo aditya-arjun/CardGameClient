@@ -298,13 +298,16 @@ function sendBringFront(cardName) {
 
 function sendFlipCard(cardName) {
     // @aditya change this
-    socket.emit('card_flip', {data: cardName});
+    socket.emit('card_flip', {data: cardName.val()});
     receiveFlipCard(cardName);
 }
 
 function sendMoveCard(cardName, newX, newY) {
     // @aditya change this
-    socket.emit('card_move', {data: (cardName, newX, newY)})
+    socket.emit('card_move', {
+        "cardName":   cardName, 
+        "newX":       newX, 
+        "newY":       newY});
     receiveMoveCard(cardName, newX, newY);
 }
 

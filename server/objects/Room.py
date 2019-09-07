@@ -2,6 +2,7 @@ import itertools
 import random
 from objects.Card import Card,CARD_SUIT,CARD_TYPE
 from objects.Player import Player
+from objects.Settings import Settings
 
 class Room:
     """ Represents a Game room.
@@ -10,10 +11,11 @@ class Room:
     associated with a game room. 
     """
 
-    def __init__(self, room_id, originX=0, originY=0, containJokers=False):
+    def __init__(self, room_id, settings, originX=0, originY=0, containJokers=False):
         self.room_id = room_id
         self.players_list = []
         self.card_list = {}
+        self.settings = settings
         # Generate card list, initialized to the (originX, originY) position of the board.
         card_ids = [element for element in itertools.product(CARD_TYPE,CARD_SUIT)]
 

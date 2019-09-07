@@ -1,6 +1,8 @@
 
 let stage;
 let preloader;
+// for keeping track of scaling ratio in makeResponsive;
+let scalingRatio = 1;
 
 // calculuate the pixel ratio of the screen
 const PIXEL_RATIO = (function () {
@@ -70,7 +72,13 @@ function getInitialCards() {
         name: "JC",
         x: 100,
         y: 200,
-        depth: 5,
+        faceUp: true,
+        owner: null
+    },
+    {
+        name: "3D",
+        x: 100,
+        y: 200,
         faceUp: true,
         owner: null
     }]
@@ -78,6 +86,11 @@ function getInitialCards() {
 
 function initializeImages(initialCards) {
     sources = [];
+    // add card back
+    sources.push({
+        id: "cardback",
+        src: "images/ace_of_spades.png"
+    });
     for (card of initialCards) {
         sources.push({
             id: card.name,
@@ -94,9 +107,46 @@ function initializeCards(initialCards) {
         cardContainer.y = card.y;
         let image = new createjs.Bitmap(preloader.getResult(card.name));
         image.scale = .2;
+        let cardback = new createjs.Bitmap(preloader.getResult("cardback"));
+        cardback.scale = .2;
         cardContainer.addChild(image);
+        let bounds = image.getBounds();
+        cardContainer.regX = bounds.width*image.scale/2;
+        cardContainer.regY = bounds.height*image.scale/2;
+        let isFaceUp = card.faceUp;
+        let isDragging = false;
+        cardContainer.on("click", e => {
+            if (isDragging) return;
+            let nextImage;
+            if (isFaceUp) {
+                nextImage = cardback;
+            }
+            else {
+                nextImage = image;
+            }
+            isFaceUp = !isFaceUp;
+            nextImage.scale = .2;
+            cardContainer.removeAllChildren();
+            cardContainer.addChild(nextImage);
+            
+        });
+        cardContainer.on("pressmove", event => {
+            isDragging = true;
+            mouseX = event.stageX / scalingRatio;
+            mouseY = event.stageY / scalingRatio;
+            // currentTarget will be the container that the event listener was added to:
+            event.currentTarget.x = mouseX;
+            event.currentTarget.y = mouseY;
+            // bring to front
+            stage.setChildIndex(cardContainer, stage.numChildren-1);
+            // make sure to redraw the stage to show the change:
+            stage.update();
+        });
+        cardContainer.on("pressup", e => {
+            isDragging = false;
+        });
+        cardContainer.mouseChildren = false;
         stage.addChild(cardContainer);
-        console.log(image);
     }
     stage.update();
 }
@@ -162,4 +212,6 @@ function init() {
 
 function handleFileComplete(initialCards) {
     initializeCards(initialCards);
+
+
 }

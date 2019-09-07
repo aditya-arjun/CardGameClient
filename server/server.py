@@ -10,9 +10,7 @@ rooms = {}
 
 @app.route('/game')
 def game():
-    print(url_for('game'))
     return render_template('game.html')
-    # return send_from_directory('','game.html')
 
 def generate_room_id():
     """ Generate ID for room """

@@ -20,6 +20,11 @@ def generate_room_id():
 def on_create(data):
     print('hello')
 
+<<<<<<< HEAD
 @socketio.on('message')
 def on_message(data):
     print('hello')
+=======
+# https://secdevops.ai/weekend-project-part-2-turning-flask-into-a-real-time-websocket-server-using-flask-socketio-ab6b45f1d896
+
+>>>>>>> 67768ab90c4fe330a60527d2cf4723e0a76652f2

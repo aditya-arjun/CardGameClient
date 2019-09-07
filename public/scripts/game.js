@@ -106,6 +106,7 @@ function initializePlayers() {
         playerShape.graphics.beginFill("#FFFFE0").drawEllipse(300, 300, 150, 150);
         playerContainer.addChild(playerShape);
         stage.addChild(playerContainer);
+        playerDict[player] = playerContainer;
     }
     stage.update();
 }

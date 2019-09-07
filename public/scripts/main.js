@@ -45,3 +45,5 @@ var firestore = firebase.firestore();
 
  // TODO: Enable Firebase Performance Monitoring.
 // firebase.performance();
+
+var socket = io();

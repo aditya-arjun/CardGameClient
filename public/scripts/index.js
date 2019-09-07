@@ -1,5 +1,5 @@
 var joinFormElement = document.getElementById('join-form');
-var gameCodeInputElement = document.getElementById('join-code')
+var joinCodeInputElement = document.getElementById('join-code')
 var joinSubmitButtonElement = document.getElementById('join-submit');
 
 function toggleJoinButton() {
@@ -9,9 +9,9 @@ function toggleJoinButton() {
 function onJoinFormSubmit(e) {
   e.preventDefault();
   // Check that the user entered a game code and is signed in.
-  if (gameCodeInputElement.value && checkSignedInWithMessage()) {
+  if (joinCodeInputElement.value && checkSignedInWithMessage()) {
   	// launch game with gameCodeInputElement.value
-  	resetMaterialTextfield(gameCodeInputElement);
+  	resetMaterialTextfield(joinCodeInputElement);
     toggleJoinButton();
     // saveMessage(messageInputElement.value).then(function() {
     //   // Clear message text field and re-enable the SEND button.
@@ -25,5 +25,5 @@ function onJoinFormSubmit(e) {
 joinFormElement.addEventListener('submit', onJoinFormSubmit);
 
 // Toggle for the button.
-gameCodeInputElement.addEventListener('keyup', toggleJoinButton);
-gameCodeInputElement.addEventListener('change', toggleJoinButton);
+joinCodeInputElement.addEventListener('keyup', toggleJoinButton);
+joinCodeInputElement.addEventListener('change', toggleJoinButton);

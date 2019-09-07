@@ -12,7 +12,7 @@ rooms = {}
 def game():
     return render_template('game.html')
 
-@app.route('/<int:room_id>')
+@app.route('/<string:room_id>')
 def render_room():
     if 'player' not in session:
         return 'hello'
@@ -40,6 +40,7 @@ def on_create(data):
     rooms[game_id] = room
     join_room(room)
     emit('join_room', {'room' : room})
+    return redirect(f'/{game_id}')
 
 @socketio.on('join_room')
 def on_join(data):

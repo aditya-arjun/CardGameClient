@@ -3,7 +3,6 @@ from flask_socketio  import SocketIO, join_room, leave_room, send, emit
 from objects import Card, Player, Room
 import random
 import string
-import pyrebase
 
 # config = {
 #     "apiKey": "AIzaSyCJICEdyv7BNBLsAGvo8praE61ELBZhBhE",

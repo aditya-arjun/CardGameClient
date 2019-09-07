@@ -16,21 +16,17 @@ class Room:
         self.card_list = {}
         # Generate card list, initialized to the (originX, originY) position of the board.
         # We also need to set the depth of all the cards
-        self.depth_counter = 54
-        depth_list = [i for i in range(52)]
         card_ids = [element for element in itertools.product(CARD_TYPE,CARD_SUIT)]
 
         # Add the jokers if there are jokers
         if (containJokers):
-            depth_list.extend((52,53))
             card_ids.extend((('J','B'),('J','R')))
-        random.shuffle(depth_list)
 
         # Create all the cards
-        for i in range(len(depth_list)):
-            card = Card(card_ids[i][0]+card_ids[i][1],originX,originY,False,depth_list[i])
+        for card_name,card_suit in card_ids:
+            card = Card(card_name+card_suit,originX,originY,False)
             self.card_list[card.name] = card
-            print(f'{card.name} {card.x} {card.y} {card.depth}')
+            print('{} {} {}'.format(card.name,card.x,card.y))
 
     def enter_room(self, player):
         """Add a player to the room"""

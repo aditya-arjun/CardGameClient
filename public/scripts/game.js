@@ -99,15 +99,33 @@ function getAllPlayers() {
     return players;
 }
 
+function initializePositions(num, length) {
+    partitions = num+1;
+    positions = [];
+    for (let i = 1; i < partitions; i++) {
+        positions.push(i/partitions * length);
+    }
+    return positions;
+}
+
 function initializePlayers() {
     let players = getAllPlayers();
-    for (let player of players) {
+    let positions = initializePositions(players.length, 1000);
+    for (let i = 0; i < players.length; i++) {
+        let player = players[i];
         let playerContainer = new createjs.Container();
+        playerContainer.x = positions[i];
+        playerContainer.y = 70;
         let playerShape = new createjs.Shape();
-        playerShape.graphics.beginFill("#FFFFE0").drawEllipse(300, 300, 150, 150);
+        playerShape.graphics.beginFill("#FFFFE0").drawEllipse(0, 0, 150, 150);
         playerContainer.addChild(playerShape);
-        stage.addChild(playerContainer);
+        let playerName = new createjs.Text(player, "20px Arial");
+        let playerCardCount = new createjs.Text("0", "20px Arial");
+        playerCardCount.y = 30;
+        playerCardCount.name = "count";
+        playerContainer.addChild(playerName, playerCardCount);
         playerDict[player] = playerContainer;
+        stage.addChild(playerContainer);
     }
     stage.update();
 }

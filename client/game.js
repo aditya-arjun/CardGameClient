@@ -1,5 +1,6 @@
 
 let stage;
+let preloader;
 
 // calculuate the pixel ratio of the screen
 const PIXEL_RATIO = (function () {
@@ -14,11 +15,102 @@ const PIXEL_RATIO = (function () {
     return pRatio;
 })();
 
+// constants regarding canvas size
+const CANVAS_WIDTH = 1200;
+const CANVAS_HEIGHT = 750;
+
+function extendCardName(card) {
+    if (card == "JB") {
+        return "black_joker";
+    }
+    else if (card == "JR") {
+        return "red_joker";
+    }
+    let extendedName = "";
+    switch (card.charAt(0)) {
+        case '1':
+            extendedName += "ace";
+            break;
+        case 'T':
+            extendedName += "ten";
+            break;
+        case 'J': 
+            extendedName += "jack";
+            break;
+        case 'Q':
+            extendedName += "queen";
+            break;
+        case 'K':
+            extendedName += "king";
+            break;
+        default:
+            extendedName += card.charAt(0);
+            break;
+    }
+    extendedName += "_of_";
+    switch (card.charAt(1)) {
+        case 'C':
+            extendedName += "clubs";
+            break;
+        case 'D':
+            extendedName += "diamonds";
+            break;
+        case 'H':
+            extendedName += "hearts";
+            break;
+        case 'S':
+            extendedName += "spades";
+            break;
+    }
+    return extendedName;
+}
+
+function getInitialCards() {
+    return [{
+        name: "JC",
+        x: 100,
+        y: 200,
+        depth: 5,
+        faceUp: true,
+        owner: null
+    }]
+}
+
+function initializeImages(initialCards) {
+    sources = [];
+    for (card of initialCards) {
+        sources.push({
+            id: card.name,
+            src: "images/" + extendCardName(card.name) + ".png"
+        })
+    }
+    return sources;
+}
+
+function initializeCards(initialCards) {
+    for (card of initialCards) {
+        let cardContainer = new createjs.Container();
+        cardContainer.x = card.x;
+        cardContainer.y = card.y;
+        let image = new createjs.Bitmap(preloader.getResult(card.name));
+        image.scale = .2;
+        cardContainer.addChild(image);
+        stage.addChild(cardContainer);
+        console.log(image);
+    }
+    stage.update();
+}
+
 function init() {
-    stage = new createjs.Stage("hypo-canvas");
+    stage = new createjs.Stage("canvas");
+    preloader = new createjs.LoadQueue();
+
+    let initialCards = getInitialCards();
+    preloader.loadManifest(initializeImages(initialCards));
+    preloader.on("complete", e => handleFileComplete(initialCards));
 
     function makeResponsive(isResp, respDim, isScale, scaleType) {
-        let can = document.getElementById("hypo-canvas");
+        let can = document.getElementById("canvas");
         var lastW, lastH, lastS = 1;
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
@@ -68,46 +160,6 @@ function init() {
     createjs.Ticker.addEventListener("tick", stage);
 }
 
-function extendCardName(card) {
-    if (card == "JB") {
-        return "black_joker";
-    }
-    else if (card == "JR") {
-        return "red_joker";
-    }
-    let extendedName = "";
-    switch (card.charAt(0)) {
-        case '1':
-            extendedName += "ace";
-            break;
-        case 'J': 
-            extendedName += "jack";
-            break;
-        case 'Q':
-            extendedName += "queen";
-            break;
-        case 'K':
-            extendedName += "king";
-            break;
-        default:
-            extendedName += card.charAt(0);
-            break;
-    }
-    extendedName += "_of_";
-    switch (card.charAt(1)) {
-        case 'C':
-            extendedName += "clubs";
-            break;
-        case 'D':
-            extendedName += "diamonds";
-            break;
-        case 'H':
-            extendedName += "hearts";
-            break;
-        case 'S':
-            extendedName += "spades";
-            break;
-    }
-    return extendedName;
+function handleFileComplete(initialCards) {
+    initializeCards(initialCards);
 }
-

@@ -3,6 +3,8 @@ let stage;
 let preloader;
 // for keeping track of scaling ratio in makeResponsive;
 let scalingRatio = 1;
+// dict
+let dict = {};
 
 // calculuate the pixel ratio of the screen
 const PIXEL_RATIO = (function () {
@@ -91,7 +93,7 @@ function initializeImages(initialCards) {
         id: "cardback",
         src: "images/ace_of_spades.png"
     });
-    for (card of initialCards) {
+    for (let card of initialCards) {
         sources.push({
             id: card.name,
             src: "images/" + extendCardName(card.name) + ".png"
@@ -101,7 +103,7 @@ function initializeImages(initialCards) {
 }
 
 function initializeCards(initialCards) {
-    for (card of initialCards) {
+    for (let card of initialCards) {
         let cardContainer = new createjs.Container();
         cardContainer.x = card.x;
         cardContainer.y = card.y;
@@ -113,32 +115,23 @@ function initializeCards(initialCards) {
         let bounds = image.getBounds();
         cardContainer.regX = bounds.width*image.scale/2;
         cardContainer.regY = bounds.height*image.scale/2;
-        let isFaceUp = card.faceUp;
+        cardContainer.faceUp = card.faceUp;
         let isDragging = false;
         cardContainer.on("click", e => {
             if (isDragging) return;
-            let nextImage;
-            if (isFaceUp) {
-                nextImage = cardback;
-            }
-            else {
-                nextImage = image;
-            }
-            isFaceUp = !isFaceUp;
-            nextImage.scale = .2;
-            cardContainer.removeAllChildren();
-            cardContainer.addChild(nextImage);
             
+            sendBringFront(card.name);
+            sendFlipCard(card.name);
+            stage.update();
         });
         cardContainer.on("pressmove", event => {
             isDragging = true;
             mouseX = event.stageX / scalingRatio;
             mouseY = event.stageY / scalingRatio;
-            // currentTarget will be the container that the event listener was added to:
-            event.currentTarget.x = mouseX;
-            event.currentTarget.y = mouseY;
             // bring to front
-            stage.setChildIndex(cardContainer, stage.numChildren-1);
+            sendBringFront(card.name);
+            sendMoveCard(card.name, mouseX, mouseY);
+
             // make sure to redraw the stage to show the change:
             stage.update();
         });
@@ -147,6 +140,7 @@ function initializeCards(initialCards) {
         });
         cardContainer.mouseChildren = false;
         stage.addChild(cardContainer);
+        dict[card.name] = cardContainer;
     }
     stage.update();
 }
@@ -214,4 +208,52 @@ function handleFileComplete(initialCards) {
     initializeCards(initialCards);
 
 
+}
+
+// Server commands
+function sendBringFront(cardName) {
+    // @aditya change this
+    receiveBringFront(cardName);
+}
+
+function sendFlipCard(cardName) {
+    // @aditya change this
+    receiveFlipCard(cardName);
+}
+
+function sendMoveCard(cardName, newX, newY) {
+    // @aditya change this
+    receiveMoveCard(cardName, newX, newY);
+}
+
+// @aditya call this
+function receiveBringFront(cardName) {
+    stage.setChildIndex(dict[cardName], stage.numChildren-1);
+    stage.update();
+}
+
+// @aditya call this
+function receiveFlipCard(cardName) {
+    let cardContainer = dict[cardName];
+    let nextImage;
+    if (cardContainer.faceUp) {
+        nextImage = new createjs.Bitmap(preloader.getResult("cardback"));
+        cardContainer.faceUp = false;
+    }
+    else {
+        nextImage = new createjs.Bitmap(preloader.getResult(cardName));
+        cardContainer.faceUp = true;
+    }
+    nextImage.scale = .2;
+    cardContainer.removeAllChildren();
+    cardContainer.addChild(nextImage);
+    stage.update();
+}
+
+// @aditya call this
+function receiveMoveCard(cardName, newX, newY) {
+    let cardContainer = dict[cardName];
+    cardContainer.x = newX;
+    cardContainer.y = newY;
+    stage.update();
 }

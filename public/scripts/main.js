@@ -44,4 +44,4 @@ initFirebaseAuth();
 var firestore = firebase.firestore();
 
  // TODO: Enable Firebase Performance Monitoring.
-firebase.performance();
+// firebase.performance();

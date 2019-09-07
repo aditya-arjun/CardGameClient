@@ -1,5 +1,5 @@
 // Template for messages.
-var MESSAGE_TEMPLATE =
+const MESSAGE_TEMPLATE =
     '<div class="message-container">' +
       '<div class="spacing"><div class="pic"></div></div>' +
       '<div class="message"></div>' +
@@ -7,4 +7,4 @@ var MESSAGE_TEMPLATE =
     '</div>';
 
 // A loading image URL.
-var LOADING_IMAGE_URL = 'https://www.google.com/images/spin-32.gif?a';
+const LOADING_IMAGE_URL = 'https://www.google.com/images/spin-32.gif?a';

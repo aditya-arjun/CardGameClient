@@ -1,0 +1,32 @@
+[debug] [2019-09-07T20:49:59.353Z] ----------------------------------------------------------------------
+[debug] [2019-09-07T20:49:59.355Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve
+[debug] [2019-09-07T20:49:59.355Z] CLI Version:   7.3.1
+[debug] [2019-09-07T20:49:59.355Z] Platform:      darwin
+[debug] [2019-09-07T20:49:59.355Z] Node Version:  v11.11.0
+[debug] [2019-09-07T20:49:59.356Z] Time:          Sat Sep 07 2019 16:49:59 GMT-0400 (Eastern Daylight Time)
+[debug] [2019-09-07T20:49:59.356Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-09-07T20:49:59.363Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-09-07T20:49:59.364Z] > authorizing via signed-in user
+[debug] [2019-09-07T20:49:59.364Z] [iam] checking project cards-216a6 for permissions ["firebase.projects.get"]
+[debug] [2019-09-07T20:49:59.365Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/cards-216a6:testIamPermissions  
+
+[debug] [2019-09-07T20:49:59.614Z] <<< HTTP RESPONSE 200
+[debug] [2019-09-07T20:49:59.616Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/cards-216a6  
+ 
+[debug] [2019-09-07T20:49:59.829Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/anvilnguyen/Dropbox/Github/CardGameClient'...
+[info] 
+[debug] [2019-09-07T20:49:59.834Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/cards-216a6/webApps/-/config  
+ 
+[warn] ⚠  Your requested "node" version "8" doesn't match your global version "11"
+[info] ✔  functions: Emulator started at http://localhost:5001
+[debug] [2019-09-07T20:50:00.167Z] <<< HTTP RESPONSE 200
+[info] i  functions: Watching "/Users/anvilnguyen/Dropbox/Github/CardGameClient/functions" for Cloud Functions...
+[info] i  hosting: Serving hosting files from: ./public
+[info] ✔  hosting: Local server: http://localhost:5000
+[debug] [2019-09-07T20:50:00.412Z] [runtime-status] Functions runtime initialized. {"cwd":"/Users/anvilnguyen/Dropbox/Github/CardGameClient/functions","node_version":"11.11.0"}
+[debug] [2019-09-07T20:50:00.412Z] [runtime-status] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true} {}
+[warn] ⚠  The Cloud Functions emulator requires the module "firebase-admin" to be installed. This package is in your package.json, but it's not available. You probably need to run "npm install" in your functions directory.
+[info] i  functions: Your functions could not be parsed due to an issue with your node_modules (see above)

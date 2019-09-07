@@ -3,10 +3,29 @@ from flask_socketio  import SocketIO, join_room, leave_room, send, emit
 from objects import Card, Player, Room
 import random
 import string
+import pyrebase
+
+# config = {
+#     "apiKey": "AIzaSyCJICEdyv7BNBLsAGvo8praE61ELBZhBhE",
+#     "authDomain": "cards-216a6.firebaseapp.com",
+#     "databaseURL": "https://cards-216a6.firebaseio.com",
+#     "projectId": "cards-216a6",
+#     "storageBucket": "cards-216a6.appspot.com",
+#     "messagingSenderId": "579456830961",
+#     "appId": "1:579456830961:web:7853ac66dc5b91fc718850"
+# };
+
+# firebase = pyrebase.initialize_app(config)
+# auth = firebase.auth()
+# db = firebase.database()
 
 app = Flask(__name__, static_url_path = '', static_folder='../public', template_folder='../public')
 socketio = SocketIO(app)
 rooms = {}
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/game')
 def game():

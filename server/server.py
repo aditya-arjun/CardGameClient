@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, redirect, url_for
 from flask_socketio  import SocketIO, join_room, leave_room, send, emit
 from objects import Card, Player, Room
 import random
@@ -7,6 +7,10 @@ import string
 app = Flask('card_app')
 socketio = SocketIO(app)
 rooms = {}
+
+@app.route('/game')
+def game():
+    return render_template(url_for('game'))
 
 def generate_room_id():
     """ Generate ID for room """

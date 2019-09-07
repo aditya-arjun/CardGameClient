@@ -59,7 +59,7 @@
   <header class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
     <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
       <div class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-        <h3><i class="material-icons">chat_bubble_outline</i> Friendly Chat</h3>
+        <h3><!-- <i class="material-icons">chat_bubble_outline</i> --> Cards!</h3>
       </div>
       <div id="user-container">
         <div hidden id="user-pic"></div>
@@ -74,8 +74,51 @@
     </div>
   </header>
 
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Settings</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="">Link</a>
+      <a class="mdl-navigation__link" href="">Link</a>
+      <a class="mdl-navigation__link" href="">Link</a>
+      <a class="mdl-navigation__link" href="">Link</a>
+    </nav>
+  </div>
+
   <main class="mdl-layout__content mdl-color--grey-100">
-    <div id="messages-card-container" class="mdl-cell mdl-cell--12-col mdl-grid">
+
+    <div id="landing-page-card-container" class="mdl-cell mdl-cell--6-col mdl-grid">
+
+      <!-- Messages container -->
+      <div id="landing-page-card" class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--6-col-tablet mdl-cell--6-col-desktop">
+        <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+          <div class="center-content-wrapper">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+              Create a new game
+            </button>
+          </div>
+          <div class="center-content-wrapper">
+            Or join an existing game!
+          </div>
+          <form id="landing-page-form" action="#">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="message" autocomplete="off">
+              <label class="mdl-textfield__label" for="message">Game Code</label>
+            </div>
+            <button id="submit" disabled type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+              Join
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+      </div>
+
+    </div>
+
+    <div id="messages-card-container" class="mdl-cell mdl-cell--6-col mdl-grid mdl-cell--bottom" style="visibility: hidden">
 
       <!-- Messages container -->
       <div id="messages-card" class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--6-col-tablet mdl-cell--6-col-desktop">
@@ -120,6 +163,9 @@
 <script src="/__/firebase/6.4.0/firebase-performance.js"></script>
 <script src="/__/firebase/init.js"></script>
 
+<script src="scripts/const.js"></script>
+<script src="scripts/auth.js"></script>
+<script src="scripts/messaging.js"></script>
 <script src="scripts/main.js"></script>
 </body>
 </html>

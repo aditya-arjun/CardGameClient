@@ -1,0 +1,26 @@
+[debug] [2019-09-07T13:05:29.651Z] ----------------------------------------------------------------------
+[debug] [2019-09-07T13:05:29.655Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve --only hosting
+[debug] [2019-09-07T13:05:29.655Z] CLI Version:   7.3.1
+[debug] [2019-09-07T13:05:29.655Z] Platform:      darwin
+[debug] [2019-09-07T13:05:29.655Z] Node Version:  v10.16.3
+[debug] [2019-09-07T13:05:29.674Z] Time:          Sat Sep 07 2019 09:05:29 GMT-0400 (Eastern Daylight Time)
+[debug] [2019-09-07T13:05:29.674Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-09-07T13:05:29.691Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-09-07T13:05:29.691Z] > authorizing via signed-in user
+[debug] [2019-09-07T13:05:29.691Z] [iam] checking project cards-216a6 for permissions ["firebase.projects.get"]
+[debug] [2019-09-07T13:05:29.693Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-09-07T13:05:29.693Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-09-07T13:05:29.890Z] <<< HTTP RESPONSE 200
+[debug] [2019-09-07T13:05:29.905Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/cards-216a6:testIamPermissions  
+
+[debug] [2019-09-07T13:05:30.208Z] <<< HTTP RESPONSE 200
+[debug] [2019-09-07T13:05:30.211Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/cards-216a6  
+ 
+[debug] [2019-09-07T13:05:30.512Z] <<< HTTP RESPONSE 200
+[debug] [2019-09-07T13:05:30.515Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/cards-216a6/webApps/-/config  
+ 
+[debug] [2019-09-07T13:05:30.922Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: ./public
+[info] ✔  hosting: Local server: http://localhost:5000

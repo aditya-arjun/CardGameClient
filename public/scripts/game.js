@@ -90,7 +90,7 @@ function getInitialCards() {
 }
 
 // Connect to socket
-var socket = io.connect("http://" + document.domain + ":" + location.port)
+var socket = io.connect("http://" + document.domain + ":" + location.port);
 
 // function getUsername() {
 //     return "richardg";
@@ -291,16 +291,19 @@ function receiveChangeOwner(cardName, newOwner) {
 // Server commands
 function sendBringFront(cardName) {
     // @aditya change this
+    socket.emit('sendFront', {data: cardName});
     receiveBringFront(cardName);
 }
 
 function sendFlipCard(cardName) {
     // @aditya change this
+    socket.emit('sendFlipCard', {data: cardName});
     receiveFlipCard(cardName);
 }
 
 function sendMoveCard(cardName, newX, newY) {
     // @aditya change this
+    socket.emit('sendMoveCard', {data: (cardName, newX, newY)})
     receiveMoveCard(cardName, newX, newY);
 }
 

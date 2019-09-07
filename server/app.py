@@ -63,9 +63,6 @@ def on_join(data):
 def get_room(session):
     return rooms[session['room_id']]
 
-def get_room(session):
-    return rooms[session['room_id']]
-
 # Stuff with the commands
 
 @socketio.on('cursor')

@@ -38,8 +38,8 @@ def on_card_flip(data):
     card_id = data['card_name']
     room = get_room(session)
     room_id = room.room_id
-
-    emit('ca')
+    room.card_list[card_id].flip()
+    emit('card-flip', {'card_name' : card_id }, room=room_id)
 
 @socketio.on('create')
 def on_create(data):

@@ -52,10 +52,10 @@ function authStateObserver(user) {
     signInButtonElement.setAttribute('hidden', 'true');
 
     // We save the Firebase Messaging Device token and enable notifications.
-    if (window.location.href.includes('game.html'))
+    if (window.location.href.includes('game.html')) {
       saveMessagingDeviceToken();
-
-    init();
+      init();
+    }
   } else { // User is signed out!
     // Hide user's profile and sign-out button.
     userNameElement.setAttribute('hidden', 'true');

@@ -4,7 +4,7 @@ from objects import Card, Player, Room
 import random
 import string
 
-app = Flask(__name__, static_url_path = '', static_folder='../client', template_folder='../client')
+app = Flask(__name__, static_url_path = '', static_folder='../public', template_folder='../public')
 socketio = SocketIO(app)
 rooms = {}
 

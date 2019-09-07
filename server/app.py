@@ -32,15 +32,6 @@ def generate_room_id():
         if not conflict:
             return id_tmp
 
-@socketio.on('card-flip')
-def on_card_flip(data):
-    ''' Flips card '''
-    card_id = data['card_name']
-    room = get_room(session)
-    room_id = room.room_id
-    room.card_list[card_id].flip()
-    emit('card-flip', {'card_name' : card_id }, room=room_id)
-
 @socketio.on('create')
 def on_create(data):
     ''' Creates game lobby '''
@@ -59,9 +50,6 @@ def on_join(data):
         session['room_id'] = room_id
     else:
         emit('error', {'error' : f'Room {room_id} passed does not exist'})
-
-def get_room(session):
-    return rooms[session['room_id']]
 
 def get_room(session):
     return rooms[session['room_id']]
@@ -91,6 +79,23 @@ def transfer(msg):
     room.update_card(card)
     # broadcast this information
     emit('transfer',msg,room=room.room_id)
+
+@socketio.on('card_front')
+def on_card_front(data):
+    ''' Brings card to front '''
+    card_id = data['card_name']
+    room = get_room(session)
+    room_id = room.room_id
+    emit('card_front', {'card_name' : card_id }, room=room_id)
+
+@socketio.on('card_flip')
+def on_card_flip(data):
+    ''' Flips card '''
+    card_id = data['card_name']
+    room = get_room(session)
+    room_id = room.room_id
+    room.card_list[card_id].flip()
+    emit('card_flip', {'card_name' : card_id }, room=room_id)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

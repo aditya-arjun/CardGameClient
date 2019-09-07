@@ -16,11 +16,19 @@ def index():
 def game():
     return render_template('game.html')
 
+<<<<<<< HEAD
 @app.route('/<int:room_id>')
 def render_room():
     if 'player' not in session:
         return 'hello'
     return 'bye'
+=======
+@app.route('/<string:room_id>')
+def render_room(room_id):
+    if room_id in rooms:
+        return rooms[room_id]
+    return redirect(url_for('index'))
+>>>>>>> bbca6cb3e6079d18bb5d750b08343b4eafb19ae3
 
 def generate_room_id():
     ''' Generate ID for room '''
@@ -56,8 +64,35 @@ def on_join(data):
     room_id = data['room']
     if room_id in rooms.keys():
         join_room(room_id)
+        session['room_id'] = room_id
     else:
         emit('error', {'error' : f'Room {room_id} passed does not exist'})
+
+def get_room(session):
+    return rooms[session['room_id']]
+
+# Stuff with the commands
+
+@socketio.on('cursor')
+def cursor_move():
+    # TODO: implement each player's cursor, then do a broadcast that tells everyone the cursor position
+    room = get_room(session)
+
+@socketio.on('card_move')
+def card_move(msg):
+    room = get_room(session)
+    card = room.get_card(msg['cardName'])
+    card.set_position(msg['newX'], msg['newY'])
+    room.update_card(card)
+    # broadcast new position to all
+
+@socketio.on('transfer')
+def transfer(msg):
+    room = get_room(session)
+    card = room.get_card(msg['cardName'])
+    card.set_owner(msg['newOwner'])
+    room.update_card(card)
+    # broadcast this information
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

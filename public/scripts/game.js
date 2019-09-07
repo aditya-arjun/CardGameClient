@@ -23,6 +23,9 @@ const PIXEL_RATIO = (function () {
     return pRatio;
 })();
 
+// Connect to socket
+var socket = io();
+
 // constants regarding canvas size
 const CANVAS_WIDTH = 1200;
 const CANVAS_HEIGHT = 750;
@@ -90,8 +93,6 @@ function getInitialCards() {
     }]
 }
 
-// Connect to socket
-var socket = io.connect("http://" + document.domain + ":" + location.port);
 
 // function getUsername() {
 //     return "richardg";

@@ -17,12 +17,13 @@
 html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
-main, #messages-card {
+main, #messages-card, .landing-page-card {
   height: 100%;
   padding-bottom: 0;
 }
 #messages-card-container {
-  height: calc(100% - 35px);
+  /*height: calc(100% - 35px);*/
+  height: 40%;
   padding-bottom: 0;
 }
 #messages-card {
@@ -198,4 +199,37 @@ main, #messages-card {
 .mdl-button .material-icons {
   top: -1px;
   margin-right: 5px;
+}
+.mdl-layout__drawer-button {
+  color: white!important;
+}
+
+/*
+ * Landing Page
+ */
+#landing-page-card-container {
+  text-align: center;
+}
+.landing-page-card {
+  margin: auto;
+  margin-top: 8px;
+}
+.landing-form {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  float: left;
+}
+#join-form .mdl-textfield {
+  width: calc(100% - 100px);
+}
+#join-form button {
+  width: 100px;
+  margin: 15px 0 0 10px;
+}
+.center-content-wrapper {
+  width: 100%;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 10px;
 }

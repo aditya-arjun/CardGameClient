@@ -116,15 +116,9 @@ function onMessageFormSubmit(e) {
     saveMessage(messageInputElement.value).then(function() {
       // Clear message text field and re-enable the SEND button.
       resetMaterialTextfield(messageInputElement);
-      toggleButton();
+      toggleChatButton();
     });
   }
-}
-
-// Resets the given MaterialTextField.
-function resetMaterialTextfield(element) {
-  element.value = '';
-  element.parentNode.MaterialTextfield.boundUpdateClassesHandler();
 }
 
 // Delete a Message from the UI.

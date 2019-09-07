@@ -17,7 +17,7 @@
 html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
-main, #messages-card, #landing-page-card {
+main, #messages-card, .landing-page-card {
   height: 100%;
   padding-bottom: 0;
 }
@@ -210,20 +210,20 @@ main, #messages-card, #landing-page-card {
 #landing-page-card-container {
   text-align: center;
 }
-#landing-page-card {
+.landing-page-card {
   margin: auto;
-  margin-top: 20px;
+  margin-top: 8px;
 }
-#landing-page-form {
+.landing-form {
   display: flex;
   flex-direction: row;
   width: 100%;
   float: left;
 }
-#landing-page-form .mdl-textfield {
+#join-form .mdl-textfield {
   width: calc(100% - 100px);
 }
-#landing-page-form button {
+#join-form button {
   width: 100px;
   margin: 15px 0 0 10px;
 }

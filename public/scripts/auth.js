@@ -34,6 +34,7 @@ function isUserSignedIn() {
 
 // Triggers when the auth state change for instance when the user signs-in or signs-out.
 function authStateObserver(user) {
+  console.log("AuthStateObserver!");
   if (user) { // User is signed in!
     // Get the signed-in user's profile pic and name.
     var profilePicUrl = getProfilePicUrl();
@@ -52,7 +53,8 @@ function authStateObserver(user) {
     signInButtonElement.setAttribute('hidden', 'true');
 
     // We save the Firebase Messaging Device token and enable notifications.
-    saveMessagingDeviceToken();
+    if (window.location.href.includes('game.html'))
+      saveMessagingDeviceToken();
   } else { // User is signed out!
     // Hide user's profile and sign-out button.
     userNameElement.setAttribute('hidden', 'true');

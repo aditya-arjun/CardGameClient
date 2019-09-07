@@ -30,16 +30,11 @@ def index():
 def game():
     return render_template('game.html')
 
-@app.route('/<int:room_id>')
-def render_room():
-    if 'player' not in session:
-        return 'hello'
-    return 'bye'
-
-@app.route('/register')
-def register():
-    return 'lol'
-
+@app.route('/<string:room_id>')
+def render_room(room_id):
+    if room_id in rooms:
+        return rooms[room_id]
+    return redirect(url_for('index'))
 
 def generate_room_id():
     """ Generate ID for room """

@@ -40,6 +40,9 @@
 
   <!-- TODO: Enable First Input Delay polyfill library. -->
   <script type="text/javascript">!function(n,e){var t,o,i,c=[],f={passive:!0,capture:!0},r=new Date,a="pointerup",u="pointercancel";function p(n,c){t||(t=c,o=n,i=new Date,w(e),s())}function s(){o>=0&&o<i-r&&(c.forEach(function(n){n(o,t)}),c=[])}function l(t){if(t.cancelable){var o=(t.timeStamp>1e12?new Date:performance.now())-t.timeStamp;"pointerdown"==t.type?function(t,o){function i(){p(t,o),r()}function c(){r()}function r(){e(a,i,f),e(u,c,f)}n(a,i,f),n(u,c,f)}(o,t):p(o,t)}}function w(n){["click","mousedown","keydown","touchstart","pointerdown"].forEach(function(e){n(e,l,f)})}w(n),self.perfMetrics=self.perfMetrics||{},self.perfMetrics.onFirstInputDelay=function(n){c.push(n),s()}}(addEventListener,removeEventListener);</script>
+
+  <!-- Socket IO -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -90,7 +93,7 @@
           </div>
           <form id="join-form" class="landing-form" action="#">
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-              <input class="mdl-textfield__input" type="text" id="game-code" autocomplete="off">
+              <input class="mdl-textfield__input" type="text" id="join-code" autocomplete="off">
               <label class="mdl-textfield__label" for="join-code">Game Code</label>
             </div>
             <button id="join-submit" disabled type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
@@ -105,18 +108,48 @@
           <div class="center-content-wrapper">
             Game Settings
           </div>
-          <form id="create-form" class="landing-form" action="#">
-            <div class="center-content-wrapper">
-              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" id="game-code" autocomplete="off">
-                <label class="mdl-textfield__label" for="game-code">Game Code</label>
+          <div class="center-content-wrapper">
+            Click on a card to exclude it from the deck
+          </div>
+          <form id="create-form" class="landing-form flex-column-wrapper" action="#">
+
+            <div class="center-content-wrapper flex-row-wrapper">
+              <div class="img-wrapper-outer">
+                <div class="img-wrapper">
+                  <img class="img-card" src="images/ace_of_clubs.png" alt="Ace of Clubs">
+                  <div id="1C" class="img-layer"></div>
+                </div>
+              </div>
+              <div class="img-wrapper-outer">
+                <div class="img-wrapper">
+                  <img class="img-card" src="images/ace_of_diamonds.png" alt="Ace of Diamonds">
+                  <div id="1D" class="img-layer"></div>
+                </div>
+              </div>
+              <div class="img-wrapper-outer">
+                <div class="img-wrapper">
+                  <img class="img-card" src="images/ace_of_hearts.png" alt="Ace of Hearts">
+                  <div id="1H" class="img-layer"></div>
+                </div>
+              </div>
+              <div class="img-wrapper-outer">
+                <div class="img-wrapper">
+                  <img class="img-card" src="images/ace_of_spades.png" alt="Ace of Spades">
+                  <div id="1S" class="img-layer"></div>
+                </div>
               </div>
             </div>
-            <div class="center-content-wrapper">
-              <button id="submit" disabled type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                Join
+            
+            <div class="flex-row-wrapper">
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="number" min="1" max="8" step="1" id="num-players" autocomplete="off">
+                <label class="mdl-textfield__label" for="num-players">Number of players (1-8)</label>
+              </div>
+              <button id="create-submit" disabled type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                Create
               </button>
             </div>
+            
           </form>
         </div>
       </div>
@@ -146,5 +179,6 @@
 <script src="scripts/util.js"></script>
 <script src="scripts/main.js"></script>
 <script src="scripts/index.js"></script>
+<script src="scripts/create.js"></script>
 </body>
 </html>

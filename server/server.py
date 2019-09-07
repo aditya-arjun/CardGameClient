@@ -1,16 +1,17 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, send_from_directory
 from flask_socketio  import SocketIO, join_room, leave_room, send, emit
 from objects import Card, Player, Room
 import random
 import string
 
-app = Flask('card_app')
+app = Flask('card_app', static_url_path='', static_folder='../client')
 socketio = SocketIO(app)
 rooms = {}
 
 @app.route('/game')
 def game():
-    return render_template(url_for('game'))
+    return render_template(url_for('static', filename='game.html'))
+    #return send_from_directory('/','game.html')
 
 def generate_room_id():
     """ Generate ID for room """

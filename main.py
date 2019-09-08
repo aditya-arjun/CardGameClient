@@ -43,6 +43,7 @@ def on_create(data):
     room = Room(room_id=game_id, excluded=data['excluded'], numPlayers=data['numPlayers'])
     rooms[game_id] = room
     data['roomCode'] = game_id
+    emit('room_number',{'room_id': game_id})
     on_join(data)
         
 @socketio.on('join_room')

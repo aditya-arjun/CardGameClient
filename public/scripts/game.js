@@ -553,7 +553,6 @@ socket.on('connect', function() {
 });
 
 socket.on('start', function(msg){
-    console.log("HIIIIII")
     init(JSON.parse(msg['data']));
 });
 
@@ -575,4 +574,8 @@ socket.on('card_flip', function(msg) {
 socket.on('card_move', function(msg) {
     if (!("author" in msg) || (msg["author"] != sessionId))
         receiveMoveCard(msg['cardName'], msg['newX'], msg['newY']);
+});
+
+socket.on('room_number', function(msg) {
+    console.log(msg['room_id']);
 });

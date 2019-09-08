@@ -52,7 +52,7 @@ function onCreateFormSubmit(e) {
   	for (let i = 0; i < cards.length; i++)
   		if (document.getElementById(cards[i]).classList.value.includes('visible'))
   			excluded.push(cards[i]);
-    socket.emit('create', {userName: getUserName(), excluded: excluded, numPlayers: numPlayersInputElement.value});
+    socket.emit('create', {userName: getUserName(), userPPUrl: getProfilePicUrl(), excluded: excluded, numPlayers: numPlayersInputElement.value});
   	resetMaterialTextfield(numPlayersInputElement);
     toggleCreateButton();
   }

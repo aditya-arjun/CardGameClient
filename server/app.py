@@ -44,12 +44,14 @@ def on_card_flip(data):
 @socketio.on('create-game')
 def on_create_game(data):
     print(data)
+    print(data['userName']) # string
     print(data['excluded']) # array of excluded cards
     print(data['numPlayers']) # integer
 
 @socketio.on('join-game')
 def on_create_game(data):
     print(data)
+    print(data['userName']) # string
     print(data['roomCode']) # string
 
 @socketio.on('create')

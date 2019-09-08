@@ -66,16 +66,6 @@
     </div>
   </header>
 
-  <div class="mdl-layout__drawer">
-    <span class="mdl-layout-title">Settings</span>
-    <nav class="mdl-navigation">
-      <a class="mdl-navigation__link" href="">Link</a>
-      <a class="mdl-navigation__link" href="">Link</a>
-      <a class="mdl-navigation__link" href="">Link</a>
-      <a class="mdl-navigation__link" href="">Link</a>
-    </nav>
-  </div>
-
   <main class="mdl-layout__content mdl-color--grey-100">
 
     <div id="landing-page-card-container" class="mdl-cell mdl-cell--6-col mdl-grid">
@@ -84,7 +74,7 @@
       <div class="landing-page-card mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--6-col-tablet mdl-cell--6-col-desktop">
         <div class="mdl-card__supporting-text mdl-color-text--grey-600">
           <div class="center-content-wrapper">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            <button id="display-game-settings-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
               Create a new game
             </button>
           </div>
@@ -103,18 +93,15 @@
         </div>
       </div>
 
-      <div class="landing-page-card mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--6-col-tablet mdl-cell--6-col-desktop">
+      <div id="game-settings" class="landing-page-card mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--6-col-tablet mdl-cell--6-col-desktop" style="display: none">
         <div class="mdl-card__supporting-text mdl-color-text--grey-600">
           <div class="center-content-wrapper">
-            Game Settings
-          </div>
-          <div class="center-content-wrapper">
-            Click on a card to exclude it from the deck
+            CREATING A GAME: click on a card to exclude it from the deck, click again to include it
           </div>
           <form id="create-form" class="landing-form flex-column-wrapper" action="#">
 
             <!-- Aces -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/ace_of_clubs.png" alt="Ace of Clubs">
@@ -142,7 +129,7 @@
             </div>
 
             <!-- 2s -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/2_of_clubs.png" alt="2 of Clubs">
@@ -170,7 +157,7 @@
             </div>
 
             <!-- 3s -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/3_of_clubs.png" alt="3 of Clubs">
@@ -198,7 +185,7 @@
             </div>
 
             <!-- 4s -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/4_of_clubs.png" alt="4 of Clubs">
@@ -226,7 +213,7 @@
             </div>
 
             <!-- 5s -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/5_of_clubs.png" alt="5 of Clubs">
@@ -254,7 +241,7 @@
             </div>
 
             <!-- 6s -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/6_of_clubs.png" alt="6 of Clubs">
@@ -282,7 +269,7 @@
             </div>
 
             <!-- 7s -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/7_of_clubs.png" alt="7 of Clubs">
@@ -310,7 +297,7 @@
             </div>
 
             <!-- 8s -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/8_of_clubs.png" alt="8 of Clubs">
@@ -338,7 +325,7 @@
             </div>
 
             <!-- 9s -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/9_of_clubs.png" alt="9 of Clubs">
@@ -366,7 +353,7 @@
             </div>
 
             <!-- 10s -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/10_of_clubs.png" alt="10 of Clubs">
@@ -394,7 +381,7 @@
             </div>
 
             <!-- Jacks -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/jack_of_clubs.png" alt="Jack of Clubs">
@@ -422,7 +409,7 @@
             </div>
 
             <!-- Queens -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/queen_of_clubs.png" alt="Queen of Clubs">
@@ -450,7 +437,7 @@
             </div>
 
             <!-- Kings -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/king_of_clubs.png" alt="King of Clubs">
@@ -478,7 +465,7 @@
             </div>
 
             <!-- Jokers -->
-            <div class="center-content-wrapper flex-row-wrapper">
+            <div class="card-row-wrapper flex-row-wrapper">
               <div class="img-wrapper-outer">
                 <div class="img-wrapper">
                   <img class="img-card" src="images/blank_card.png" alt="Filler">

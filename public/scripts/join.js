@@ -11,7 +11,7 @@ function onJoinFormSubmit(e) {
   // Check that the user entered a game code and is signed in.
   if (joinCodeInputElement.value && checkSignedInWithMessage()) {
     // joins game
-    socket.emit('join-game', {roomCode: joinCodeInputElement.value});
+    socket.emit('join-game', {userName: getUserName(), roomCode: joinCodeInputElement.value});
   	resetMaterialTextfield(joinCodeInputElement);
     toggleJoinButton();
   }

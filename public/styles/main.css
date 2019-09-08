@@ -235,7 +235,10 @@ main, #messages-card, .landing-page-card {
   padding-bottom: 10px;
 }
 
-
+.card-row-wrapper {
+  width: 100%;
+  text-align: center;
+}
 .img-wrapper-outer {
   padding: 5px;
 }

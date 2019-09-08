@@ -1,3 +1,9 @@
+var displayGameSettingsButtonElement = document.getElementById('display-game-settings-button');
+var gameSettingsElement = document.getElementById('game-settings');
+displayGameSettingsButtonElement.addEventListener('click', function() {
+  displayElement(gameSettingsElement);
+});
+
 var cards = ['1C', '1D', '1H', '1S',
              '2C', '2D', '2H', '2S',
              '3C', '3D', '3H', '3S',
@@ -46,7 +52,7 @@ function onCreateFormSubmit(e) {
   	for (let i = 0; i < cards.length; i++)
   		if (document.getElementById(cards[i]).classList.value.includes('visible'))
   			excluded.push(cards[i]);
-  	socket.emit('create-game', {excluded: excluded, numPlayers: numPlayersInputElement.value});
+  	socket.emit('create-game', {userName: getUserName(), excluded: excluded, numPlayers: numPlayersInputElement.value});
   	resetMaterialTextfield(numPlayersInputElement);
     toggleCreateButton();
   }

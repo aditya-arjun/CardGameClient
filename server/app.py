@@ -36,6 +36,7 @@ def on_create(data):
     ''' Creates game lobby '''
     print(data)
     print(data['userName']) # string
+    print(data['userPPUrl']) # string
     print(data['excluded']) # array of excluded cards
     print(data['numPlayers']) # integer
     game_id = generate_room_id()
@@ -49,6 +50,7 @@ def on_create(data):
 def on_join(data):
     print(data)
     print(data['userName']) # string
+    print(data['userPPUrl']) # string
     print(data['roomCode']) # string
     room_id = data['room']
     if room_id in rooms.keys():

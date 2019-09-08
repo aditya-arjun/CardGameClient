@@ -282,6 +282,9 @@ function init(board) {
     username = getUserName();
 
     // TODO: change
+    let playerImages = ['https://lh4.googleusercontent.com/-DeP3OFe72UA/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rc7FWra7Ou9HgqSdwI_kqf-2FSzGQ/photo.jpg',
+        'https://lh4.googleusercontent.com/-DeP3OFe72UA/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rc7FWra7Ou9HgqSdwI_kqf-2FSzGQ/photo.jpg',
+        'https://lh4.googleusercontent.com/-DeP3OFe72UA/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rc7FWra7Ou9HgqSdwI_kqf-2FSzGQ/photo.jpg']
     initializePlayers(players, playerImages);
     initializeCursors(players);
 
@@ -545,13 +548,9 @@ socket.on('connect', function() {
     socket.on('generate_user_id', function(msg) {
         sessionId = msg['data'];
     });
-    socket.emit('check_room');
-    // socket.emit('createExtra',{'settings': null});
-    // socket.emit('join_room',{'room': 'A'})
 });
 
-socket.on('start', function(msg){
-    console.log("HIIIIII")
+socket.on('start', function(msg) {
     init(JSON.parse(msg['data']));
 });
 

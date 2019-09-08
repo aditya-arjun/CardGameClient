@@ -1,8 +1,8 @@
 
-
 from flask import Flask, render_template, redirect, url_for, send_from_directory, session
 from flask_socketio  import SocketIO, join_room, leave_room, send, emit
 from objects.Room import Room
+from objects.Player import Player
 
 import random
 import string
@@ -42,14 +42,14 @@ def generate_user_id():
 @socketio.on('create')
 def on_create(data):
     ''' Creates game lobby '''
-    # print(data)
-    # print(data['userName']) # string
-    # print(data['userPPUrl']) # string
-    # print(data['excluded']) # array of excluded cards
-    # print(data['numPlayers']) # integer
     game_id = generate_room_id()
-    room = Room(room_id=game_id, excluded=data['excluded'])
+    room = Room(room_id=game_id, excluded=data['excluded'], numPlayers=data['numPlayers'])
+    creating_user = Player(username=data['username'], userPPUrl=data['userPPUrl'])
+    room.enter_room(creating_user)
     rooms[game_id] = room
+
+    if len(room.players_list) == room.numPlayers:
+        emit('start', room.toJSON(), broadcast=True) 
 
 @socketio.on('createExtra')
 def on_createExtra(data, jr = False):
@@ -68,14 +68,16 @@ def on_createExtra(data, jr = False):
         
 @socketio.on('join_room')
 def on_join(data):
-    # print(data)
-    # print(data['userName']) # string
-    # print(data['userPPUrl']) # string
-    # print(data['roomCode']) # string
-    room_id = data['room']
+    joining_user = Player(username=data['username'], userPPUrl=data['userPPUrl'])
+    room_id = data['roomCode']
     if room_id in rooms:
         join_room(room_id)
         session['room_id'] = room_id
+        room = rooms[room_id]
+        room.enter_room(joining_user)
+
+        if len(room.players_list) == room.numPlayers:
+            emit('start', room.toJSON(), broadcast=True) 
     else:
         emit('error', {'error' : f'Room {room_id} passed does not exist'})
 
@@ -157,6 +159,9 @@ def on_deal(data):
         
         emit('transfer', {'cardName' : card_name, 'newOwner' : room.players_list[curr_player].username }, broadcast=True)
 
+@socketio.on('retrieve')
+def on_retrieve(msg):
+    emit('retrieve', rooms[session['room_id']].toJSON())
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

@@ -59,7 +59,6 @@ function authStateObserver(user) {
     if (window.location.href.includes("game.html")) {
       saveMessagingDeviceToken();
     }
-
     init();
   } else {
     // User is signed out!

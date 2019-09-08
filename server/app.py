@@ -28,7 +28,7 @@ def generate_room_id():
     id_length = 6
     while True:
         id_tmp = ''.join(random.SystemRandom().choice(string.ascii_uppercase) for _ in range(id_length))
-        conflict = id_tmp in rooms.keys()
+        conflict = id_tmp in rooms
         if not conflict:
             return id_tmp
 
@@ -86,7 +86,7 @@ def on_card_front(data):
     card_id = data['card_name']
     room = get_room(session)
     room_id = room.room_id
-    emit('card_front', {'card_name' : card_id }, room=room_id)
+    emit('card_front', data, room=room_id)
 
 @socketio.on('card_flip')
 def on_card_flip(data):
@@ -95,7 +95,55 @@ def on_card_flip(data):
     room = get_room(session)
     room_id = room.room_id
     room.card_list[card_id].flip()
-    emit('card_flip', {'card_name' : card_id }, room=room_id)
+    emit('card_flip', data, room=room_id)
+
+@socketio.on('reset')
+def on_reset(data):
+    ''' Resets cards back to deck '''
+    deckX = 100
+    deckY = 100
+
+    room = get_room(session)
+    room_id = room.room_id
+    for card in room.get_cards_list():
+        card.x = deckX
+        card.y = deckY
+        if card.face_up:
+            card.flip()
+            emit('card_flip', {'card_name' : card.name }, broadcast=True)
+        
+        if card.owner:
+            card.set_owner(None)
+            emit('transfer', {'cardName' : card.name, 'newOwner' : None }, broadcast=True)
+        
+        emit('card_move',{'cardName' : card.name, 'newX' : card.x, 'newY' : card.y}, broadcast=True)
+
+@socketio.on('deal')
+def on_deal(data):
+    ''' Deals cards to players and sends info '''
+    room = get_room(session)
+    room_id = room.room_id
+
+    cards = room.card_list.items()
+    random.shuffle(items)
+
+    cards_per_player = len(room.card_list) // len(room.players_list)
+    if len(room.card_list) % len(room.players_list) > 0:
+        cards_per_player += 1
+    
+    curr_player = 0
+    for card_name, card in cards:
+        if len(room.players_list[curr_player].card_list) == cards_per_player:
+            curr_player += 1
+        
+        emit('transfer', {'cardName' : card_name, 'newOwner' : room.players_list[curr_player].username }, broadcast=True)
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

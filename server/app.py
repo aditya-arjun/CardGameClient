@@ -42,37 +42,38 @@ def generate_user_id():
 @socketio.on('create')
 def on_create(data):
     ''' Creates game lobby '''
-    print(data)
-    print(data['userName']) # string
-    print(data['userPPUrl']) # string
-    print(data['excluded']) # array of excluded cards
-    print(data['numPlayers']) # integer
+    # print(data)
+    # print(data['userName']) # string
+    # print(data['userPPUrl']) # string
+    # print(data['excluded']) # array of excluded cards
+    # print(data['numPlayers']) # integer
     game_id = generate_room_id()
-    room = Room(room_id=game_id, settings=data['settings'])
+    room = Room(room_id=game_id, excluded=data['excluded'])
     rooms[game_id] = room
-    join_room(room)
-    emit('join_room', {'room' : room})
-    return redirect(f'/{game_id}')
 
 @socketio.on('createExtra')
-def on_createExtra(data):
+def on_createExtra(data, jr = False):
     ''' Creates game lobby '''
     game_id = 'A'
     if game_id not in rooms:
         room = Room(room_id=game_id)
         rooms[game_id] = room
-        on_join({'room': game_id})
+        if jr:
+            on_join({
+                'room': game_id, 
+                'userName': '', 
+                'userPPUrl': '',
+                'roomCode': ''
+            })
         
 @socketio.on('join_room')
 def on_join(data):
-    print(data)
-    print(data['userName']) # string
-    print(data['userPPUrl']) # string
-    print(data['roomCode']) # string
+    # print(data)
+    # print(data['userName']) # string
+    # print(data['userPPUrl']) # string
+    # print(data['roomCode']) # string
     room_id = data['room']
-    if 'room_id' in session and room_id == session['room_id']:
-        pass
-    elif room_id in rooms:
+    if room_id in rooms:
         join_room(room_id)
         session['room_id'] = room_id
     else:

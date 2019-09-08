@@ -4,18 +4,26 @@ from objects.Room import Room
 from objects.Player import Player
 
 import random
+import uuid
 import string
 
 app = Flask(__name__, static_url_path = '', static_folder='public', template_folder='public')
+app.config.update({
+    'SECRET_KEY': 'keyboard kittens',
+})
 socketio = SocketIO(app)
 rooms = {}
 
 @app.route('/',methods=['GET','POST'])
 def index():
+    if 'uid' not in session:
+        session['uid'] = uuid.uuid4()
     return render_template('index.html')
 
 @app.route('/game',methods=['GET','POST'])
 def game():
+    if 'uid' not in session:
+        session['uid'] = uuid.uuid4()
     return render_template('game.html')
 
 @app.route('/game/<string:room_id>')
@@ -43,6 +51,7 @@ def on_create(data):
     room = Room(room_id=game_id, excluded=data['excluded'], numPlayers=data['numPlayers'])
     rooms[game_id] = room
     data['roomCode'] = game_id
+    session['room_id'] = game_id
     on_join(data)
         
 @socketio.on('join_room')
@@ -50,7 +59,9 @@ def on_join(data):
     joining_user = Player(username=data['userName'], userPPUrl=data['userPPUrl'])
     room_id = data['roomCode']
     if room_id in rooms:
+        print(session['uid'])
         session['room_id'] = room_id
+        print(session['room_id'])
         join_room(room_id)
         room = rooms[room_id]
         room.enter_room(joining_user)
@@ -68,6 +79,8 @@ def on_check():
     print(room.numPlayers)
 
 def get_room():
+    print(session['uid'])
+    print(session['room_id'])
     return rooms[session['room_id']]
 
 # Stuff with the commands

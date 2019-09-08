@@ -350,13 +350,13 @@ function handleFileComplete(initialCards) {
     //createPersonalHand(["5D", "3C"]);
 
     let dealButton = new createjs.DOMElement("deal-button");
-    dealButton.x = 100;
-    dealButton.y = 200;
+    dealButton.x = 47;
+    dealButton.y = 160;
     dealButton.scale = .5;
     stage.addChild(dealButton);
     let resetButton = new createjs.DOMElement("reset-button");
-    resetButton.x = 100;
-    resetButton.y = 220;
+    resetButton.x = 47;
+    resetButton.y = 170;
     resetButton.scale = .5;
     stage.addChild(resetButton);
     document.getElementById("deal-button").addEventListener("click", e => sendDealEvent());

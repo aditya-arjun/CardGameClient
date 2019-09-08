@@ -41,7 +41,11 @@ def on_card_flip(data):
 
     emit('ca')
 
-
+@socketio.on('create-game')
+def on_create_game(data):
+    print(data)
+    print(data['excluded']) # array of excluded cards
+    print(data['numPlayers']) # integer
 
 @socketio.on('create')
 def on_create(data):

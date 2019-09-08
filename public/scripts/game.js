@@ -80,8 +80,8 @@ function extendCardName(card) {
 function getInitialCards() {
     return [{
         name: "JC",
-        x: 100,
-        y: 200,
+        x: 150,
+        y: 250,
         faceUp: true,
         owner: null
     },
@@ -156,7 +156,7 @@ function createPersonalHand(arr) {
     let deltaX = 30;
     for (let i = 0; i < arr.length; i++) {
         if (arr[i] == null) {
-
+            // haha blank
         }
         else {
             receiveMoveCard(arr[i], i * deltaX+ 190, 640);
@@ -290,7 +290,8 @@ function init() {
         resizeCanvas();
         function resizeCanvas() {
             var w = CANVAS_WIDTH, h = CANVAS_HEIGHT;
-            var iw = window.innerWidth, ih = window.innerHeight;
+            let hackyTopHeight = document.getElementById("top-header").offsetHeight;
+            var iw = window.innerWidth, ih = window.innerHeight - hackyTopHeight;
             var pRatio = PIXEL_RATIO;
             // necessary for dom elements to look right
             pRatio *= 2;
@@ -341,10 +342,10 @@ function handleFileComplete(initialCards) {
     personalArea.graphics.beginFill("#FFFFE0").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.75, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.2, 15);
     stage.addChild(personalArea); 
     let players = getAllPlayers();
-
+/*
     let deckArea = new createjs.Shape();
     deckArea.graphics.beginFill("#FFFFE0").drawRoundRect(300, 300, 90, 130, 10);
-    stage.addChild(deckArea);
+    stage.addChild(deckArea);*/
 
     //createPersonalHand(["5D", "3C"]);
 
@@ -359,7 +360,7 @@ function handleFileComplete(initialCards) {
                 let deltaX = 30;
                 for (let i = 0; i < personalHand.length; i++) {
                     if (mouseX > i*deltaX+160 && mouseX <= deltaX*(i+1)+160) {
-                        movePersonalToIndex(currentCard, i);
+                        //movePersonalToIndex(currentCard, i);
                         break;
                     }
                 }
@@ -386,6 +387,7 @@ function movePersonalToIndex(card, index) {
     }
     personalHand.splice(index, 0, card);
     createPersonalHand(personalHand);
+    console.log(personalHand);
 }
 
 function sendChangeOwner(cardName, newOwner) {
@@ -401,7 +403,7 @@ function receiveChangeOwner(cardName, newOwner) {
     console.log(cardName + ", new owner:" + newOwner);
     if (cardOwners[cardName] != null) {
         if (cardOwners[cardName] == username) {
-            
+            personalHand.splice(personalHand.indexOf(cardName), 1);
         }
         else {
             let owner = cardOwners[cardName];
@@ -421,13 +423,14 @@ function receiveChangeOwner(cardName, newOwner) {
     else {
         // what happens if i'm the new owner
         if (!personalHand.includes(cardName)) {
-            movePersonalToIndex(cardName, personalHand.length-1);
+            movePersonalToIndex(cardName, personalHand.length);
         }
         else {
-            movePersonalToIndex(cardName, )
+            movePersonalToIndex(cardName, personalHand.length);
         }
+        /*
         personalHand.push(cardName);
-        createPersonalHand(personalHand);
+        createPersonalHand(personalHand);*/
     }
 }
 

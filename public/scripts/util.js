@@ -13,3 +13,7 @@ function resetMaterialTextfield(element) {
   element.value = '';
   element.parentNode.MaterialTextfield.boundUpdateClassesHandler();
 }
+
+function displayElement(element) {
+	element.style.display = "block";
+}

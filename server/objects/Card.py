@@ -15,6 +15,10 @@ class Card:
     
     def set_owner(self, nxt_owner):
         self.owner = nxt_owner
+
+    def set_position(self, x, y):
+        self.x = x
+        self.y = y
     
     def card_value(self):
         ''' Returns integer representation of value of card '''

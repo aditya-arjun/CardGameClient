@@ -178,7 +178,7 @@ function initializePlayers(players) {
         playerContainer.x = positions[idx];
         playerContainer.y = 70;
         let playerShape = new createjs.Shape();
-        playerShape.graphics.beginFill("#FFFFE0").drawEllipse(0, 0, 100, 100);
+        playerShape.graphics.beginFill("rgba(2, 136, 209, 0.25)").drawEllipse(0, 0, 100, 100);
         playerShape.regX = -50;
         playerContainer.addChild(playerShape);
         //let playerName = new createjs.Text(player, "20px Arial");
@@ -354,7 +354,7 @@ function handleFileComplete(initialCards, players) {
     initializeCards(initialCards);
 
     let personalArea = new createjs.Shape();
-    personalArea.graphics.beginFill("#FFFFE0").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.75, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.2, 15);
+    personalArea.graphics.beginFill("rgba(2, 136, 209, 0.25)").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.75, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.2, 15);
     stage.addChild(personalArea); 
     //let players = getAllPlayers();
 /*

@@ -576,8 +576,12 @@ socket.on('connect', function() {
     socket.on('generate_user_id', function(msg) {
         sessionId = msg['data'];
     });
-    socket.emit('createExtra',{'settings': null});
-    socket.emit('join_room',{'room': 'A'})
+    // socket.emit('createExtra',{'settings': null});
+    // socket.emit('join_room',{'room': 'A'})
+});
+
+socket.on('start', function(msg){
+    init();
 });
 
 socket.on('transfer', function(msg) {

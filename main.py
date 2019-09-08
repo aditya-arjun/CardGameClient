@@ -153,4 +153,4 @@ def on_retrieve(msg):
     emit('retrieve', rooms[session['room_id']].toJSON())
 
 if __name__ == '__main__':
-    socketio.run(app, port=443, debug=True )
+    socketio.run(app, host= '0.0.0.0', port=443, debug=True )

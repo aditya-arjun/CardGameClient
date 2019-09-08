@@ -3,21 +3,17 @@ var joinCodeInputElement = document.getElementById('join-code')
 var joinSubmitButtonElement = document.getElementById('join-submit');
 
 function toggleJoinButton() {
-	toggleButton(gameCodeInputElement, joinSubmitButtonElement);
+	toggleButton(joinCodeInputElement, joinSubmitButtonElement);
 }
 
 function onJoinFormSubmit(e) {
   e.preventDefault();
   // Check that the user entered a game code and is signed in.
   if (joinCodeInputElement.value && checkSignedInWithMessage()) {
-  	// launch game with gameCodeInputElement.value
+    // joins game
+    socket.emit('join_room', {userName: getUserName(), userPPUrl: getProfilePicUrl(), roomCode: joinCodeInputElement.value});
   	resetMaterialTextfield(joinCodeInputElement);
     toggleJoinButton();
-    // saveMessage(messageInputElement.value).then(function() {
-    //   // Clear message text field and re-enable the SEND button.
-    //   resetMaterialTextfield(gameCodeInputElement);
-    //   toggleChatButton();
-    // });
   }
 }
 

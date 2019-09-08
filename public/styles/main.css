@@ -1,18 +1,5 @@
 :root {
   --color-img-layer: rgba(108, 117, 125, 0.75);
-  /*--color-album-grey: #6c757d;
-  --color-portfolio-layer: rgba(0, 40, 255, 0.75);
-  --color-portfolio-layer: rgba(62, 0, 151, 0.75);
-  --color-light-grey: #bbbbbb;
-  --color-medium-grey: #666666;
-  --color-slate-grey: #2e2e2e;
-  --color-theme: #000fbb;
-  --color-theme: rgba(0, 15, 187, 0.75);
-  --color-theme: rgba(62, 0, 151, 0.9);
-  --font-theme: 'Proxima Nova', serif, sans-serif;
-  --font-theme: 'Open Sans', serif, sans-serif;
-  --card-title-lg-size: 16px;
-  --card-title-sm-size: 14px;*/
 }
 
 html, body {
@@ -22,13 +9,12 @@ main, #messages-card, .landing-page-card {
   height: 100%;
   padding-bottom: 0;
 }
-#messages-card-container {
-  /*height: calc(100% - 35px);*/
-  height: 40%;
-  padding-bottom: 0;
-}
 #messages-card {
+  height: 50%;
   margin-top: 15px;
+  position: fixed;
+  right: 0;
+  bottom: 0;
 }
 .mdl-layout__header-row span {
   margin-left: 15px;
@@ -205,6 +191,7 @@ main, #messages-card, .landing-page-card {
   color: white!important;
 }
 
+
 /*
  * Landing Page
  */
@@ -235,7 +222,10 @@ main, #messages-card, .landing-page-card {
   padding-bottom: 10px;
 }
 
-
+.card-row-wrapper {
+  width: 100%;
+  text-align: center;
+}
 .img-wrapper-outer {
   padding: 5px;
 }

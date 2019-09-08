@@ -289,10 +289,12 @@ function init() {
     preloader = new createjs.LoadQueue();
 
     let initialCards = getInitialCards();
-    preloader.loadManifest(initializeImages(initialCards));
-    preloader.on("complete", e => handleFileComplete(initialCards));
-    username = getUserName();
     let players = getAllPlayers();
+    let cursorColor = "#32CD32";
+    preloader.loadManifest(initializeImages(initialCards));
+    preloader.on("complete", e => handleFileComplete(initialCards, players));
+    username = getUserName();
+    
     initializePlayers(players);
     initializeCursors(players);
 
@@ -348,13 +350,13 @@ function init() {
     createjs.Ticker.addEventListener("tick", stage);
 }
 
-function handleFileComplete(initialCards) {
+function handleFileComplete(initialCards, players) {
     initializeCards(initialCards);
 
     let personalArea = new createjs.Shape();
     personalArea.graphics.beginFill("#FFFFE0").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.75, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.2, 15);
     stage.addChild(personalArea); 
-    let players = getAllPlayers();
+    //let players = getAllPlayers();
 /*
     let deckArea = new createjs.Shape();
     deckArea.graphics.beginFill("#FFFFE0").drawRoundRect(300, 300, 90, 130, 10);
@@ -406,7 +408,7 @@ function handleFileComplete(initialCards) {
     });
 
     
-    stage.addChild(cursor);
+    
     stage.on("stagemousemove", e => {
         let mouseX = e.stageX / scalingRatio;
         let mouseY = e.stageY / scalingRatio;
@@ -446,7 +448,7 @@ function sendResetEvent() {
 
 }
 
-function sendChangeOwner(name, newOwner) {
+function sendChangeOwner(cardName, newOwner) {
     socket.emit('transfer',{
         "author": sessionId,
         'cardName': cardName,

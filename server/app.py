@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, redirect, url_for, send_from_directory, session
 from flask_socketio  import SocketIO, join_room, leave_room, send, emit
 from objects import Card, Player, Room
@@ -16,7 +17,6 @@ def index():
 def game():
     return render_template('game.html')
 
-
 @app.route('/<string:room_id>')
 def render_room(room_id):
     if room_id in rooms:
@@ -24,24 +24,13 @@ def render_room(room_id):
     return redirect(url_for('index'))
 
 def generate_room_id():
-    ''' Generate ID for room '''
+    """ Generate ID for room """
     id_length = 6
     while True:
         id_tmp = ''.join(random.SystemRandom().choice(string.ascii_uppercase) for _ in range(id_length))
         conflict = id_tmp in rooms.keys()
         if not conflict:
             return id_tmp
-
-@socketio.on('card-flip')
-def on_card_flip(data):
-    ''' Flips card '''
-    card_id = data['card_name']
-    room = get_room(session)
-    room_id = room.room_id
-
-    emit('ca')
-
-
 
 @socketio.on('create')
 def on_create(data):
@@ -68,7 +57,7 @@ def get_room(session):
 # Stuff with the commands
 
 @socketio.on('cursor')
-def cursor_move():
+def cursor_move(msg):
     # TODO: implement each player's cursor, then do a broadcast that tells everyone the cursor position
     room = get_room(session)
 
@@ -77,8 +66,10 @@ def card_move(msg):
     room = get_room(session)
     card = room.get_card(msg['cardName'])
     card.set_position(msg['newX'], msg['newY'])
+    print(msg['cardName'] + ' changed to position: ' + msg['newX'] + ' ' +  msg['newY'])
     room.update_card(card)
     # broadcast new position to all
+    emit('card_move',msg,room=room.room_id)
 
 @socketio.on('transfer')
 def transfer(msg):
@@ -87,6 +78,24 @@ def transfer(msg):
     card.set_owner(msg['newOwner'])
     room.update_card(card)
     # broadcast this information
+    emit('transfer',msg,room=room.room_id)
+
+@socketio.on('card_front')
+def on_card_front(data):
+    ''' Brings card to front '''
+    card_id = data['card_name']
+    room = get_room(session)
+    room_id = room.room_id
+    emit('card_front', {'card_name' : card_id }, room=room_id)
+
+@socketio.on('card_flip')
+def on_card_flip(data):
+    ''' Flips card '''
+    card_id = data['card_name']
+    room = get_room(session)
+    room_id = room.room_id
+    room.card_list[card_id].flip()
+    emit('card_flip', {'card_name' : card_id }, room=room_id)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

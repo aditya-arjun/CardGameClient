@@ -15,6 +15,8 @@ def index():
 
 @app.route('/game')
 def game():
+    # if 'room_id' not in session:
+    #     return redirect(url_for('index'))
     return render_template('game.html')
 
 @app.route('/<string:room_id>')

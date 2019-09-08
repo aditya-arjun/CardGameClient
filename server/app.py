@@ -98,18 +98,12 @@ def transfer(msg):
 @socketio.on('card_front')
 def on_card_front(msg):
     ''' Brings card to front '''
-    card_id = data['card_name']
-    room = get_room(session)
-    room_id = room.room_id
-    emit('card_front', data, broadcast=True)
+    emit('card_front', msg, broadcast=True)
 
 @socketio.on('card_flip')
 def on_card_flip(msg):
     ''' Flips card '''
-    card_id = msg['cardName']
-    room = get_room(session)
-    room.card_list[card_id].flip()
-    emit('card_flip', data,broadcast=True)
+    emit('card_flip', msg,broadcast=True)
 
 @socketio.on('reset')
 def on_reset(data):
@@ -136,10 +130,9 @@ def on_reset(data):
 def on_deal(data):
     ''' Deals cards to players and sends info '''
     room = get_room(session)
-    room_id = room.room_id
 
     cards = room.card_list.items()
-    random.shuffle(items)
+    random.shuffle(cards)
 
     cards_per_player = len(room.card_list) // len(room.players_list)
     if len(room.card_list) % len(room.players_list) > 0:
@@ -151,12 +144,6 @@ def on_deal(data):
             curr_player += 1
         
         emit('transfer', {'cardName' : card_name, 'newOwner' : room.players_list[curr_player].username }, broadcast=True)
-
-
-
-
-
-
 
 
 if __name__ == '__main__':

@@ -577,5 +577,5 @@ socket.on('card_move', function(msg) {
 });
 
 socket.on('room_number', function(msg) {
-    console.log(msg['room_id']);
+    alert('Your game has been created! Room ID: ' + msg['room_id']);
 });

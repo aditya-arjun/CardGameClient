@@ -58,7 +58,7 @@ function authStateObserver(user) {
     // We save the Firebase Messaging Device token and enable notifications.
     if (window.location.href.includes("game")) {
       saveMessagingDeviceToken();
-      init();
+      // init();
     }
   } else {
     // User is signed out!

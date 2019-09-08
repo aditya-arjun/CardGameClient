@@ -6,7 +6,7 @@ from objects.Player import Player
 import random
 import string
 
-app = Flask(__name__, static_url_path = '', static_folder='/public', template_folder='/public')
+app = Flask(__name__, static_url_path = '', static_folder='public', template_folder='public')
 socketio = SocketIO(app)
 rooms = {}
 
@@ -17,7 +17,7 @@ def index():
 @app.route('/game')
 def game():
     if 'room_id' not in session:
-        return redirect(url_for('index'))
+        return redirect('index.html')
     return render_template('game.html')
 
 @app.route('/game/<string:room_id>')
@@ -43,27 +43,31 @@ def on_create(data):
     ''' Creates game lobby '''
     game_id = generate_room_id()
     room = Room(room_id=game_id, excluded=data['excluded'], numPlayers=data['numPlayers'])
-    creating_user = Player(username=data['userName'], userPPUrl=data['userPPUrl'])
-    room.enter_room(creating_user)
     rooms[game_id] = room
-
-    if len(room.players_list) == room.numPlayers:
-        emit('start', room.toJSON(), broadcast=True) 
+    data['roomCode'] = game_id
+    on_join(data)
         
 @socketio.on('join_room')
 def on_join(data):
     joining_user = Player(username=data['userName'], userPPUrl=data['userPPUrl'])
     room_id = data['roomCode']
     if room_id in rooms:
-        join_room(room_id)
         session['room_id'] = room_id
+        join_room(room_id)
         room = rooms[room_id]
         room.enter_room(joining_user)
-
-        if len(room.players_list) == room.numPlayers:
-            emit('start', room.toJSON(), broadcast=True) 
+        emit('confirm')
     else:
         emit('error', {'error' : f'Room {room_id} passed does not exist'})
+
+@socketio.on('check_room')
+def on_check():
+    room = get_room(session)
+    if len(room.players_list) == int(room.numPlayers):
+        print(type(room.toJSON()))
+        emit('start', {'data':room.toJSON()}, broadcast=True)
+    print(len(room.players_list))
+    print(room.numPlayers)
 
 def get_room(session):
     return rooms[session['room_id']]

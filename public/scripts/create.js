@@ -55,6 +55,11 @@ function onCreateFormSubmit(e) {
     socket.emit('create', {userName: getUserName(), userPPUrl: getProfilePicUrl(), excluded: excluded, numPlayers: numPlayersInputElement.value});
   	resetMaterialTextfield(numPlayersInputElement);
     toggleCreateButton();
+    // launch
+    
+    socket.on('confirm', function() {
+      window.location.href = '/game.html';
+    });
   }
 }
 

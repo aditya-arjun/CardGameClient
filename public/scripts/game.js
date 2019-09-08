@@ -275,13 +275,15 @@ function init(board) {
     stage = new createjs.Stage("canvas");
     preloader = new createjs.LoadQueue();
 
-    let initialCards = board["card_list"];
-    let players = board["players_list"];
-    let cursorColor = "#32CD32";
+    let initialCards = getInitialCards(board)
+    let players = getAllPlayers(board)
+    let cursorColor = "#32CD32"; // TODO: change
+
     preloader.loadManifest(initializeImages(initialCards));
     preloader.on("complete", e => handleFileComplete(initialCards, players));
     username = getUserName();
 
+    // TODO: change
     initializePlayers(players, playerImages);
     initializeCursors(players);
 
@@ -545,12 +547,14 @@ socket.on('connect', function() {
     socket.on('generate_user_id', function(msg) {
         sessionId = msg['data'];
     });
+    socket.emit('check_room');
     // socket.emit('createExtra',{'settings': null});
     // socket.emit('join_room',{'room': 'A'})
 });
 
 socket.on('start', function(msg){
-    init(msg);
+    console.log("HIIIIII")
+    init(JSON.parse(msg['data']));
 });
 
 socket.on('transfer', function(msg) {

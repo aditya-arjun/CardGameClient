@@ -23,6 +23,9 @@ const PIXEL_RATIO = (function () {
     return pRatio;
 })();
 
+// Connect to socket
+// var socket = io();
+
 // constants regarding canvas size
 const CANVAS_WIDTH = 1200;
 const CANVAS_HEIGHT = 750;
@@ -90,8 +93,6 @@ function getInitialCards() {
     }]
 }
 
-// Connect to socket
-var socket = io.connect("http://" + document.domain + ":" + location.port);
 
 // function getUsername() {
 //     return "richardg";
@@ -317,22 +318,22 @@ function receiveChangeOwner(cardName, newOwner) {
 // Server commands
 function sendBringFront(cardName) {
     // @aditya change this
-    socket.emit('cursor', {data: cardName});
+    // socket.emit('cursor', {data: cardName});
     receiveBringFront(cardName);
 }
 
 function sendFlipCard(cardName) {
     // @aditya change this
-    socket.emit('card_flip', {'data': cardName});
+    // socket.emit('card_flip', {'data': cardName});
     receiveFlipCard(cardName);
 }
 
 function sendMoveCard(cardName, newX, newY) {
     // @aditya change this
-    socket.emit('card_move', {
-        "cardName":   cardName, 
-        "newX":       newX, 
-        "newY":       newY});
+    // socket.emit('card_move', {
+    //     "cardName":   cardName, 
+    //     "newX":       newX, 
+    //     "newY":       newY});
     receiveMoveCard(cardName, newX, newY);
 }
 

@@ -275,8 +275,8 @@ function init(board) {
     stage = new createjs.Stage("canvas");
     preloader = new createjs.LoadQueue();
 
-    let initialCards = getInitialCards(board);
-    let players = getAllPlayers(board);
+    let initialCards = board["card_list"];
+    let players = board["players_list"];
     let cursorColor = "#32CD32";
     preloader.loadManifest(initializeImages(initialCards));
     preloader.on("complete", e => handleFileComplete(initialCards, players));

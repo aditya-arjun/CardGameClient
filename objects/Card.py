@@ -27,7 +27,7 @@ class Card:
         if self.name == 'JB' or self.name == 'JR':
             return len(CARD_TYPE)
         
-        return CARD_TYPE.index(name[0])
+        return CARD_TYPE.index(self.name[0])
 
     def toJSON(self):
         """Convert the Room to JSON Format"""

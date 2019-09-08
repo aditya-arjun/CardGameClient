@@ -51,20 +51,20 @@ def on_create(data):
     if len(room.players_list) == room.numPlayers:
         emit('start', room.toJSON(), broadcast=True) 
 
-@socketio.on('createExtra')
-def on_createExtra(data, jr = False):
-    ''' Creates game lobby '''
-    game_id = 'A'
-    if game_id not in rooms:
-        room = Room(room_id=game_id)
-        rooms[game_id] = room
-        if jr:
-            on_join({
-                'room': game_id, 
-                'userName': '', 
-                'userPPUrl': '',
-                'roomCode': ''
-            })
+# @socketio.on('createExtra')
+# def on_createExtra(data, jr = False):
+#     ''' Creates game lobby '''
+#     game_id = 'A'
+#     if game_id not in rooms:
+#         room = Room(room_id=game_id)
+#         rooms[game_id] = room
+#         if jr:
+#             on_join({
+#                 'room': game_id, 
+#                 'userName': '', 
+#                 'userPPUrl': '',
+#                 'roomCode': ''
+#             })
         
 @socketio.on('join_room')
 def on_join(data):

@@ -1,8 +1,8 @@
 
-
 from flask import Flask, render_template, redirect, url_for, send_from_directory, session
 from flask_socketio  import SocketIO, join_room, leave_room, send, emit
 from objects.Room import Room
+from objects.Player import Player
 
 import random
 import string
@@ -50,8 +50,6 @@ def on_create(data):
 
     if len(room.players_list) == room.numPlayers:
         emit('start', room.toJSON(), broadcast=True) 
-
-
 
 @socketio.on('createExtra')
 def on_createExtra(data, jr = False):
@@ -162,6 +160,9 @@ def on_deal(data):
         
         emit('transfer', {'cardName' : card_name, 'newOwner' : room.players_list[curr_player].username }, broadcast=True)
 
+@socketio.on('retrieve')
+def on_retrieve(msg):
+    emit('retrieve', rooms[session['room_id']].toJSON())
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

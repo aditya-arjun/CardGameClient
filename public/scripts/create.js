@@ -58,7 +58,8 @@ function onCreateFormSubmit(e) {
     // launch
     
     socket.on('confirm', function() {
-      window.location.href = '/game.html';
+      loadGamePage();
+      // window.location.href = '/game.html';
     });
   }
 }

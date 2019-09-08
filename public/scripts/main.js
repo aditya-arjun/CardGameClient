@@ -37,6 +37,14 @@ var signInSnackbarElement = document.getElementById('must-signin-snackbar');
 signOutButtonElement.addEventListener('click', signOut);
 signInButtonElement.addEventListener('click', signIn);
 
+var landingPageWrapperElement = document.getElementById('landing-page-wrapper');
+var gamePageWrapperElement = document.getElementById('game-page-wrapper');
+
+function loadGamePage() {
+  landingPageWrapperElement.style.display = 'none';
+  gamePageWrapperElement.style.display = 'block';
+}
+
 // initialize Firebase
 initFirebaseAuth();
 

@@ -349,6 +349,19 @@ function handleFileComplete(initialCards) {
 
     //createPersonalHand(["5D", "3C"]);
 
+    let dealButton = new createjs.DOMElement("deal-button");
+    dealButton.x = 100;
+    dealButton.y = 200;
+    dealButton.scale = .5;
+    stage.addChild(dealButton);
+    let resetButton = new createjs.DOMElement("reset-button");
+    resetButton.x = 100;
+    resetButton.y = 220;
+    resetButton.scale = .5;
+    stage.addChild(resetButton);
+    document.getElementById("deal-button").addEventListener("click", e => sendDealEvent());
+    document.getElementById("reset-button").addEventListener("click", e => sendResetEvent());
+
     stage.on("stagemouseup", e => {
         let newOwner = null;
 
@@ -388,6 +401,14 @@ function movePersonalToIndex(card, index) {
     personalHand.splice(index, 0, card);
     createPersonalHand(personalHand);
     console.log(personalHand);
+}
+
+function sendDealEvent() {
+    
+}
+
+function sendResetEvent() {
+
 }
 
 function sendChangeOwner(cardName, newOwner) {

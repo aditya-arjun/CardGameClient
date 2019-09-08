@@ -2,6 +2,8 @@
 CARD_TYPE = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
 CARD_SUIT = ['C','D','H','S']
 
+import json
+
 class Card: 
     def __init__(self, name, x, y, face_up=False, owner=None):
         self.name = name
@@ -26,3 +28,7 @@ class Card:
             return len(CARD_TYPE)
         
         return CARD_TYPE.index(name[0])
+
+    def toJSON(self):
+        """Convert the Room to JSON Format"""
+        return json.dumps(self, default=lambda o: o.__dict__, indent=4)

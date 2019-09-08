@@ -9,6 +9,7 @@ let playerDict = {};
 let cardOwners = {}
 let username;
 let currentCard = null;
+let personalHand = [];
 
 // calculuate the pixel ratio of the screen
 const PIXEL_RATIO = (function () {
@@ -136,17 +137,6 @@ function initializePositions(num, length) {
 
 function createPlayerHands(num) {
     let hand = new createjs.Container();
-    /*let image = new createjs.Bitmap(preloader.getResult("cardback"));
-    image.scale = .1;
-    image.x = 100;
-    image.y = 100;
-    stage.addChild(image);
-    stage.update();
-    console.log(image);
-    let bounds = image.getBounds();
-    console.log(bounds);
-    let deltaX = bounds.width/2;
-    let deltaY = bounds.height/2;*/
     let deltaX = 8;
     let deltaY = 15;
     for (let i = 0; i < num; i++) {
@@ -159,6 +149,20 @@ function createPlayerHands(num) {
     hand.x = 80;
     hand.y = 60;
     return hand;
+}
+
+function createPersonalHand(arr) {
+    //let hand = new createjs.Container();
+    let deltaX = 30;
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] == null) {
+
+        }
+        else {
+            receiveMoveCard(arr[i], i * deltaX+ 190, 640);
+            receiveBringFront(arr[i]);
+        }
+    }
 }
 
 function initializePlayers() {
@@ -338,6 +342,12 @@ function handleFileComplete(initialCards) {
     stage.addChild(personalArea); 
     let players = getAllPlayers();
 
+    let deckArea = new createjs.Shape();
+    deckArea.graphics.beginFill("#FFFFE0").drawRoundRect(300, 300, 90, 130, 10);
+    stage.addChild(deckArea);
+
+    //createPersonalHand(["5D", "3C"]);
+
     stage.on("stagemouseup", e => {
         let newOwner = null;
 
@@ -346,6 +356,13 @@ function handleFileComplete(initialCards) {
             let mouseY = e.stageY / scalingRatio;
             if (personalArea.hitTest(mouseX, mouseY)) {
                 newOwner = username;
+                let deltaX = 30;
+                for (let i = 0; i < personalHand.length; i++) {
+                    if (mouseX > i*deltaX+160 && mouseX <= deltaX*(i+1)+160) {
+                        movePersonalToIndex(currentCard, i);
+                        break;
+                    }
+                }
             }
 
             for (let player of players) {
@@ -363,6 +380,14 @@ function handleFileComplete(initialCards) {
     stage.update();
 }
 
+function movePersonalToIndex(card, index) {
+    if (personalHand.includes(card)) {
+        personalHand.splice(personalHand.indexOf(card), 1);
+    }
+    personalHand.splice(index, 0, card);
+    createPersonalHand(personalHand);
+}
+
 function sendChangeOwner(cardName, newOwner) {
     socket.emit('transfer',{
         'cardName': cardName,
@@ -373,11 +398,15 @@ function sendChangeOwner(cardName, newOwner) {
 
 function receiveChangeOwner(cardName, newOwner) {
     console.log(cardName + ", new owner:" + newOwner);
-    if (cardOwners[cardName] != null && cardOwners[cardName] != username) {
-        let owner = cardOwners[cardName];
-        playerDict[owner].decrement();
-        //let count = playerDict[owner].getChildByName("count").text;
-        //playerDict[owner].getChildByName("count").text = Number(count)-1;
+    if (cardOwners[cardName] != null) {
+        if (cardOwners[cardName] == username) {
+            
+        }
+        else {
+            let owner = cardOwners[cardName];
+            playerDict[owner].decrement();
+        }
+        
     }
     cardOwners[cardName] = newOwner;
     if (newOwner == null) {
@@ -386,12 +415,18 @@ function receiveChangeOwner(cardName, newOwner) {
     else if (username != newOwner) {
         cardDict[cardName].visible = false;
         playerDict[newOwner].increment();
-        /*let owner = newOwner;
-        let count = playerDict[owner].getChildByName("count").text;
-        playerDict[owner].getChildByName("count").text = Number(count)+1;*/
+
     }
     else {
         // what happens if i'm the new owner
+        if (!personalHand.includes(cardName)) {
+            movePersonalToIndex(cardName, personalHand.length-1);
+        }
+        else {
+            movePersonalToIndex(cardName, )
+        }
+        personalHand.push(cardName);
+        createPersonalHand(personalHand);
     }
 }
 

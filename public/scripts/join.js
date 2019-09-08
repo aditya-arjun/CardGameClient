@@ -15,6 +15,10 @@ function onJoinFormSubmit(e) {
   	resetMaterialTextfield(joinCodeInputElement);
     toggleJoinButton();
   }
+  socket.on('confirm', function() {
+    loadGamePage();
+    // window.location.href = '/game.html';
+  });
 }
 
 // Saves message on form submit.

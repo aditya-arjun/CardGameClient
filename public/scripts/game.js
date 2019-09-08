@@ -79,8 +79,10 @@ function extendCardName(card) {
 
 function getInitialCards(board) {
     let initialCards = []
-    for (let key in board.card_list)
+    for (let key in board.card_list) {
+        console.log(key);
         initialCards.push(board.card_list[key]);
+    }
     return initialCards;
 }
 
@@ -550,7 +552,8 @@ socket.on('connect', function() {
     });
 });
 
-socket.on('start', function(msg) {
+socket.on('start', function(msg){
+    console.log("HIIIIII")
     init(JSON.parse(msg['data']));
 });
 

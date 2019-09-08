@@ -17,6 +17,7 @@ class Room:
         self.card_list = {}
         self.excluded = excluded
         self.numPlayers = numPlayers
+        self.card_order = []
         
         # Generate card list, initialized to the (originX, originY) position of the board.
         card_ids = [element for element in itertools.product(CARD_TYPE,CARD_SUIT)]
@@ -27,8 +28,16 @@ class Room:
             card = Card(card_name+card_suit,originX,originY,False)
             self.card_list[card.name] = card
 
+
         for card_id in excluded:
             self.card_list.pop(card_id, None)
+            card_ids.remove((card_id[0],card_id[1]))
+        
+        random.shuffle(card_ids)
+
+        for card_id in card_ids:
+            self.card_order.append(card_id[0]+card_id[1])
+
         
 
     def enter_room(self, player):

@@ -550,7 +550,7 @@ socket.on('connect', function() {
 });
 
 socket.on('start', function(msg){
-    init();
+    init(msg);
 });
 
 socket.on('transfer', function(msg) {

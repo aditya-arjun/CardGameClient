@@ -1,7 +1,8 @@
 
 class Player:
-    def __init__(self, username):
+    def __init__(self, username, userPPUrl):
         self.username = username
+        self.userPPUrl = userPPUrl
         self.card_list = []
         self.cursor_x = 0
         self.cursor_y = 0

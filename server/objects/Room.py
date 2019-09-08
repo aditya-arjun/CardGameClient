@@ -11,11 +11,13 @@ class Room:
     associated with a game room. 
     """
 
-    def __init__(self, room_id, settings=0, originX=0, originY=0, containJokers=False):
+    def __init__(self, room_id, excluded, numPlayers, originX=0, originY=0, containJokers=False):
         self.room_id = room_id
         self.players_list = []
         self.card_list = {}
-        self.settings = settings
+        self.excluded = excluded
+        self.numPlayers = numPlayers
+        
         # Generate card list, initialized to the (originX, originY) position of the board.
         card_ids = [element for element in itertools.product(CARD_TYPE,CARD_SUIT)]
 

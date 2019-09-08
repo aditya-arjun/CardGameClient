@@ -42,14 +42,16 @@ def generate_user_id():
 @socketio.on('create')
 def on_create(data):
     ''' Creates game lobby '''
-    # print(data)
-    # print(data['userName']) # string
-    # print(data['userPPUrl']) # string
-    # print(data['excluded']) # array of excluded cards
-    # print(data['numPlayers']) # integer
     game_id = generate_room_id()
-    room = Room(room_id=game_id, settings=data['settings'])
+    room = Room(room_id=game_id, excluded=data['excluded'], numPlayers=data['numPlayers'])
+    creating_user = Player(username=data['username'], userPPUrl=data['userPPUrl'])
+    room.enter_room(creating_user)
     rooms[game_id] = room
+
+    if len(room.players_list) == numPlayers:
+        emit('start', ) #JSONIFY
+
+
 
 @socketio.on('createExtra')
 def on_createExtra(data):
@@ -67,14 +69,17 @@ def on_createExtra(data):
         
 @socketio.on('join_room')
 def on_join(data):
-    # print(data)
-    # print(data['userName']) # string
-    # print(data['userPPUrl']) # string
-    # print(data['roomCode']) # string
-    room_id = data['room']
+
+    joining_user = Player(username=data['username'], userPPUrl=data['userPPUrl'])
+    room_id = data['roomCode']
     if room_id in rooms:
         join_room(room_id)
         session['room_id'] = room_id
+        room = rooms[room_id]
+        room.enter_room(joining_user)
+
+        if len(room.players_list) == numPlayers:
+            emit('start', ) #JSONIFY
     else:
         emit('error', {'error' : f'Room {room_id} passed does not exist'})
 

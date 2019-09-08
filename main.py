@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, redirect, url_for, send_from_directory, session
 from flask_socketio  import SocketIO, join_room, leave_room, send, emit
 from objects.Room import Room
@@ -7,7 +6,7 @@ from objects.Player import Player
 import random
 import string
 
-app = Flask(__name__, static_url_path = '', static_folder='../public', template_folder='../public')
+app = Flask(__name__, static_url_path = '', static_folder='public', template_folder='public')
 socketio = SocketIO(app)
 rooms = {}
 
@@ -44,7 +43,7 @@ def on_create(data):
     ''' Creates game lobby '''
     game_id = generate_room_id()
     room = Room(room_id=game_id, excluded=data['excluded'], numPlayers=data['numPlayers'])
-    creating_user = Player(username=data['username'], userPPUrl=data['userPPUrl'])
+    creating_user = Player(username=data['userName'], userPPUrl=data['userPPUrl'])
     room.enter_room(creating_user)
     rooms[game_id] = room
 
@@ -68,7 +67,7 @@ def on_create(data):
         
 @socketio.on('join_room')
 def on_join(data):
-    joining_user = Player(username=data['username'], userPPUrl=data['userPPUrl'])
+    joining_user = Player(username=data['userName'], userPPUrl=data['userPPUrl'])
     room_id = data['roomCode']
     if room_id in rooms:
         join_room(room_id)

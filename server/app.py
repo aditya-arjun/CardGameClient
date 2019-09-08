@@ -1,7 +1,8 @@
 
 from flask import Flask, render_template, redirect, url_for, send_from_directory, session
 from flask_socketio  import SocketIO, join_room, leave_room, send, emit
-from objects import Card, Player, Room
+from objects.Room import Room
+
 import random
 import string
 
@@ -40,15 +41,26 @@ def on_create(data):
     game_id = generate_room_id()
     room = Room(room_id=game_id, settings=data['settings'])
     rooms[game_id] = room
-    join_room(room)
+    join_room(game_id)
     emit('join_room', {'room' : room})
     return redirect(f'/{game_id}')
+
+@socketio.on('createExtra')
+def on_createExtra(data):
+    ''' Creates game lobby '''
+    game_id = 'A'
+    if game_id not in rooms:
+        room = Room(room_id=game_id)
+        rooms[game_id] = room
+        on_join({'room': game_id})
 
 @socketio.on('join_room')
 def on_join(data):
     room_id = data['room']
-    if room_id in rooms.keys():
-        join_room(room_id)
+    if 'room_id' in session and room_id == session['room_id']:
+        pass
+    elif room_id in rooms:
+        join_room('A')
         session['room_id'] = room_id
     else:
         emit('error', {'error' : f'Room {room_id} passed does not exist'})
@@ -68,10 +80,9 @@ def card_move(msg):
     room = get_room(session)
     card = room.get_card(msg['cardName'])
     card.set_position(msg['newX'], msg['newY'])
-    print(msg['cardName'] + ' changed to position: ' + msg['newX'] + ' ' +  msg['newY'])
     room.update_card(card)
     # broadcast new position to all
-    emit('card_move',msg,room=room.room_id)
+    emit('card_move',msg,namespace=None,room='A')
 
 @socketio.on('transfer')
 def transfer(msg):

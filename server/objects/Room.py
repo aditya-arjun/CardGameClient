@@ -3,7 +3,6 @@ import random
 import json
 from objects.Card import Card,CARD_SUIT,CARD_TYPE
 from objects.Player import Player
-from objects.Settings import Settings
 
 class Room:
     """ Represents a Game room.
@@ -12,14 +11,16 @@ class Room:
     associated with a game room. 
     """
 
-    def __init__(self, room_id, capacity = 8, excluded=0, originX=0, originY=0, containJokers=False):
+    def __init__(self, room_id, excluded, numPlayers, originX=0, originY=0, containJokers=False):
         self.room_id = room_id
-        self.capacity = capacity
         self.players_list = []
+        self.card_list = {}
+        self.excluded = excluded
+        self.numPlayers = numPlayers
+        
         # Generate card list, initialized to the (originX, originY) position of the board.
         card_ids = [element for element in itertools.product(CARD_TYPE,CARD_SUIT)]
 
-        self.card_list = {}
         card_ids.extend((('J','B'),('J','R')))
         # Create all the cards
         for card_name,card_suit in card_ids:

@@ -48,7 +48,7 @@ function extendCardName(card) {
         case 'T':
             extendedName += "10";
             break;
-        case 'J': 
+        case 'J':
             extendedName += "jack";
             break;
         case 'Q':
@@ -137,10 +137,12 @@ function createPersonalHand(arr) {
     }
 }
 
-function initializePlayers(players) {
+function initializePlayers(players, playerImages) {
     let positions = initializePositions(players.length-1, 1000);
     let idx = 0;
-    for (let player of players) {
+    for (let i = 0; i < players.length; i++) {
+        let player = players[i];
+        //let playerImage = playerImages[i];
         if (player == username) {
             continue;
         }
@@ -150,7 +152,15 @@ function initializePlayers(players) {
         let playerShape = new createjs.Shape();
         playerShape.graphics.beginFill("rgba(2, 136, 209, 0.25)").drawEllipse(0, 0, 100, 100);
         playerShape.regX = -50;
-        playerContainer.addChild(playerShape);
+        let image = document.createElement("img");
+        image.crossOrigin = "Anonymous";
+        image.src = playerImages[i];
+        let playerImage = new createjs.Bitmap(image);
+        playerImage.crossOrigin = "Anonymous";
+        playerImage.scale = .2;
+        playerImage.mask = playerShape;
+        playerImage.x = 50;
+        playerContainer.addChild(playerShape, playerImage);
         //let playerName = new createjs.Text(player, "20px Arial");
         //let playerCardCount = new createjs.Text("0", "20px Arial");
         //playerCardCount.y = 30;
@@ -188,6 +198,8 @@ function initializeCursors(players) {
         if (player == username) continue;
         let cursor = new createjs.Shape();
         cursor.graphics.beginStroke(cursorColor).drawEllipse(0, 0, 10, 10);
+        cursor.x = -10;
+        cursor.y = -10;
         stage.addChild(cursor);
         cursorsDict[player] = cursor;
     }
@@ -218,7 +230,12 @@ function initializeCards(initialCards) {
         image.scale = .15;
         let cardback = new createjs.Bitmap(preloader.getResult("cardback"));
         cardback.scale = .15;
-        cardContainer.addChild(image);
+        if (card.faceUp) {
+            cardContainer.addChild(image);
+        }
+        else {
+            cardContainer.addChild(cardback);
+        }
         let bounds = image.getBounds();
         cardContainer.regX = bounds.width*image.scale/2;
         cardContainer.regY = bounds.height*image.scale/2;
@@ -244,7 +261,7 @@ function initializeCards(initialCards) {
         cardContainer.on("pressup", e => {
             sendBringFront(card.name);
             isDragging = false;
-            
+
         });
         cardContainer.mouseChildren = false;
         stage.addChild(cardContainer);
@@ -264,8 +281,8 @@ function init(board) {
     preloader.loadManifest(initializeImages(initialCards));
     preloader.on("complete", e => handleFileComplete(initialCards, players));
     username = getUserName();
-    
-    initializePlayers(players);
+
+    initializePlayers(players, playerImages);
     initializeCursors(players);
 
     function makeResponsive(isResp, respDim, isScale, scaleType) {
@@ -325,7 +342,7 @@ function handleFileComplete(initialCards, players) {
 
     let personalArea = new createjs.Shape();
     personalArea.graphics.beginFill("rgba(2, 136, 209, 0.25)").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.75, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.2, 15);
-    stage.addChild(personalArea); 
+    stage.addChild(personalArea);
     //let players = getAllPlayers();
 /*
     let deckArea = new createjs.Shape();
@@ -335,14 +352,14 @@ function handleFileComplete(initialCards, players) {
     //createPersonalHand(["5D", "3C"]);
 
     let dealButton = new createjs.DOMElement("deal-button");
-    dealButton.x = 41;
-    dealButton.y = 160;
-    dealButton.scale = .5;
+    dealButton.x = 55/ PIXEL_RATIO;
+    dealButton.y = 200 / PIXEL_RATIO;
+    dealButton.scale = .5 / PIXEL_RATIO;
     stage.addChild(dealButton);
     let resetButton = new createjs.DOMElement("reset-button");
-    resetButton.x = 41;
-    resetButton.y = 180;
-    resetButton.scale = .5;
+    resetButton.x = 55 / PIXEL_RATIO;
+    resetButton.y = 220 / PIXEL_RATIO;
+    resetButton.scale = .5 / PIXEL_RATIO;
     stage.addChild(resetButton);
     document.getElementById("deal-button").addEventListener("click", e => sendDealEvent());
     document.getElementById("reset-button").addEventListener("click", e => sendResetEvent());
@@ -373,17 +390,15 @@ function handleFileComplete(initialCards, players) {
                 }
             }
             sendChangeOwner(currentCard, newOwner);
-            currentCard = null; 
+            currentCard = null;
         }
     });
 
-    
-    
+
+
     stage.on("stagemousemove", e => {
         let mouseX = e.stageX / scalingRatio;
         let mouseY = e.stageY / scalingRatio;
-        /*cursor.x = mouseX;
-        cursor.y = mouseY;*/
         sendMoveCursor(username, mouseX, mouseY);
     });
     stage.update();
@@ -411,7 +426,7 @@ function receiveMoveCursor(name, newX, newY) {
 }
 
 function sendDealEvent() {
-    
+
 }
 
 function sendResetEvent() {
@@ -437,7 +452,7 @@ function receiveChangeOwner(cardName, newOwner) {
             let owner = cardOwners[cardName];
             playerDict[owner].decrement();
         }
-        
+
     }
     cardOwners[cardName] = newOwner;
     if (newOwner == null) {
@@ -485,8 +500,8 @@ function sendMoveCard(cardName, newX, newY) {
     // @aditya change this
     socket.emit('card_move', {
         "author":     sessionId,
-        "cardName":   cardName, 
-        "newX":       newX, 
+        "cardName":   cardName,
+        "newX":       newX,
         "newY":       newY});
     receiveMoveCard(cardName, newX, newY);
 }

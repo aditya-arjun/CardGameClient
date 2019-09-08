@@ -7,10 +7,12 @@ let scalingRatio = 1;
 let cardDict = {};
 let playerDict = {};
 let cardOwners = {};
+let cursorsDict = {};
 let sessionId;
 let username;
 let currentCard = null;
 let personalHand = [];
+let cursorColor = "#32CD32";
 
 // calculuate the pixel ratio of the screen
 const PIXEL_RATIO = (function () {
@@ -165,8 +167,7 @@ function createPersonalHand(arr) {
     }
 }
 
-function initializePlayers() {
-    let players = getAllPlayers();
+function initializePlayers(players) {
     let positions = initializePositions(players.length-1, 1000);
     let idx = 0;
     for (let player of players) {
@@ -210,6 +211,16 @@ function initializePlayers() {
         idx++;
     }
     stage.update();
+}
+
+function initializeCursors(players) {
+    for (let player of players) {
+        if (player == username) continue;
+        let cursor = new createjs.Shape();
+        cursor.graphics.beginStroke(cursorColor).drawEllipse(0, 0, 10, 10);
+        stage.addChild(cursor);
+        cursorsDict[player] = cursor;
+    }
 }
 
 function initializeImages(initialCards) {
@@ -281,7 +292,9 @@ function init() {
     preloader.loadManifest(initializeImages(initialCards));
     preloader.on("complete", e => handleFileComplete(initialCards));
     username = getUserName();
-    initializePlayers();
+    let players = getAllPlayers();
+    initializePlayers(players);
+    initializeCursors(players);
 
     function makeResponsive(isResp, respDim, isScale, scaleType) {
         let can = document.getElementById("canvas");
@@ -349,6 +362,19 @@ function handleFileComplete(initialCards) {
 
     //createPersonalHand(["5D", "3C"]);
 
+    let dealButton = new createjs.DOMElement("deal-button");
+    dealButton.x = 47;
+    dealButton.y = 160;
+    dealButton.scale = .5;
+    stage.addChild(dealButton);
+    let resetButton = new createjs.DOMElement("reset-button");
+    resetButton.x = 47;
+    resetButton.y = 170;
+    resetButton.scale = .5;
+    stage.addChild(resetButton);
+    document.getElementById("deal-button").addEventListener("click", e => sendDealEvent());
+    document.getElementById("reset-button").addEventListener("click", e => sendResetEvent());
+
     stage.on("stagemouseup", e => {
         let newOwner = null;
 
@@ -378,6 +404,16 @@ function handleFileComplete(initialCards) {
             currentCard = null; 
         }
     });
+
+    
+    stage.addChild(cursor);
+    stage.on("stagemousemove", e => {
+        let mouseX = e.stageX / scalingRatio;
+        let mouseY = e.stageY / scalingRatio;
+        /*cursor.x = mouseX;
+        cursor.y = mouseY;*/
+        sendMoveCursor(username, mouseX, mouseY);
+    });
     stage.update();
 }
 
@@ -390,7 +426,27 @@ function movePersonalToIndex(card, index) {
     console.log(personalHand);
 }
 
-function sendChangeOwner(cardName, newOwner) {
+function sendMoveCursor(name, newX, newY) {
+
+}
+
+function receiveMoveCursor(name, newX, newY) {
+    if (name == username) return;
+    let cursor = cursorsDict[name];
+    cursor.x = newX;
+    cursor.y = newY;
+    stage.update();
+}
+
+function sendDealEvent() {
+    
+}
+
+function sendResetEvent() {
+
+}
+
+function sendChangeOwner(name, newOwner) {
     socket.emit('transfer',{
         "author": sessionId,
         'cardName': cardName,

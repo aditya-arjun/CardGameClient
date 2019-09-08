@@ -48,24 +48,25 @@ def on_create(data):
     room.enter_room(creating_user)
     rooms[game_id] = room
 
-    if len(room.players_list) == numPlayers:
-        emit('start', ) #JSONIFY
+    if len(room.players_list) == room.numPlayers:
+        emit('start', room.toJSON(), broadcast=True) 
 
 
 
 @socketio.on('createExtra')
-def on_createExtra(data):
+def on_createExtra(data, jr = False):
     ''' Creates game lobby '''
     game_id = 'A'
     if game_id not in rooms:
         room = Room(room_id=game_id)
         rooms[game_id] = room
-        on_join({
-            'room': game_id, 
-            'userName': '', 
-            'userPPUrl': '',
-            'roomCode': ''
-        })
+        if jr:
+            on_join({
+                'room': game_id, 
+                'userName': '', 
+                'userPPUrl': '',
+                'roomCode': ''
+            })
         
 @socketio.on('join_room')
 def on_join(data):
@@ -78,8 +79,8 @@ def on_join(data):
         room = rooms[room_id]
         room.enter_room(joining_user)
 
-        if len(room.players_list) == numPlayers:
-            emit('start', ) #JSONIFY
+        if len(room.players_list) == room.numPlayers:
+            emit('start', room.toJSON(), broadcast=True) 
     else:
         emit('error', {'error' : f'Room {room_id} passed does not exist'})
 

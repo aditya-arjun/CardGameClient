@@ -1,5 +1,6 @@
 import itertools
 import random
+import json
 from objects.Card import Card,CARD_SUIT,CARD_TYPE
 from objects.Player import Player
 from objects.Settings import Settings
@@ -11,24 +12,31 @@ class Room:
     associated with a game room. 
     """
 
+<<<<<<< HEAD
     def __init__(self, room_id, excluded, numPlayers, originX=0, originY=0, containJokers=False):
+=======
+    def __init__(self, room_id, capacity = 8, excluded=0, originX=0, originY=0, containJokers=False):
+>>>>>>> 176caa8497304db671dead67aee3d19be92b249c
         self.room_id = room_id
+        self.capacity = capacity
         self.players_list = []
+<<<<<<< HEAD
         self.card_list = {}
         self.excluded = excluded
         self.numPlayers = numPlayers
         
+=======
+>>>>>>> 176caa8497304db671dead67aee3d19be92b249c
         # Generate card list, initialized to the (originX, originY) position of the board.
         card_ids = [element for element in itertools.product(CARD_TYPE,CARD_SUIT)]
 
-        # Add the jokers if there are jokers
-        if (containJokers):
-            card_ids.extend((('J','B'),('J','R')))
-
+        self.card_list = {}
+        card_ids.extend((('J','B'),('J','R')))
         # Create all the cards
         for card_name,card_suit in card_ids:
             card = Card(card_name+card_suit,originX,originY,False)
             self.card_list[card.name] = card
+        
 
     def enter_room(self, player):
         """Add a player to the room"""
@@ -59,3 +67,7 @@ class Room:
     def update_card(self, card):
         """Change the state of a card"""
         self.card_list[card.name] = card
+
+    def toJSON(self):
+        """Convert the Room to JSON Format"""
+        return json.dumps(self, default=lambda o: o.__dict__, indent=4)

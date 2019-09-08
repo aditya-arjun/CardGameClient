@@ -265,3 +265,10 @@ main, #messages-card, .landing-page-card {
   width: 100%;
   float: left;
 }
+
+#deal-button {
+  width: 50px;
+}
+#reset-button {
+  width: 50px;
+}

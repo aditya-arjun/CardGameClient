@@ -68,7 +68,6 @@ def on_createExtra(data, jr = False):
         
 @socketio.on('join_room')
 def on_join(data):
-
     joining_user = Player(username=data['username'], userPPUrl=data['userPPUrl'])
     room_id = data['roomCode']
     if room_id in rooms:

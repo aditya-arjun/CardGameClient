@@ -6,7 +6,7 @@ from objects.Player import Player
 import random
 import string
 
-app = Flask(__name__, static_url_path = '', static_folder='public', template_folder='public')
+app = Flask(__name__, static_url_path = '', static_folder='/public', template_folder='/public')
 socketio = SocketIO(app)
 rooms = {}
 
@@ -16,8 +16,8 @@ def index():
 
 @app.route('/game')
 def game():
-    # if 'room_id' not in session:
-    #     return redirect(url_for('index'))
+    if 'room_id' not in session:
+        return redirect(url_for('index'))
     return render_template('game.html')
 
 @app.route('/game/<string:room_id>')
@@ -49,21 +49,6 @@ def on_create(data):
 
     if len(room.players_list) == room.numPlayers:
         emit('start', room.toJSON(), broadcast=True) 
-
-# @socketio.on('createExtra')
-# def on_createExtra(data, jr = False):
-#     ''' Creates game lobby '''
-#     game_id = 'A'
-#     if game_id not in rooms:
-#         room = Room(room_id=game_id)
-#         rooms[game_id] = room
-#         if jr:
-#             on_join({
-#                 'room': game_id, 
-#                 'userName': '', 
-#                 'userPPUrl': '',
-#                 'roomCode': ''
-#             })
         
 @socketio.on('join_room')
 def on_join(data):
@@ -87,7 +72,6 @@ def get_room(session):
 
 @socketio.on('cursor')
 def cursor_move(msg):
-    # TODO: implement each player's cursor, then do a broadcast that tells everyone the cursor position
     room = get_room(session)
     for player in room.players_list:
         if player.session_id is msg['author']:
@@ -130,7 +114,6 @@ def on_reset(data):
     deckY = 100
 
     room = get_room(session)
-    room_id = room.room_id
     for card in room.get_cards_list():
         card.x = deckX
         card.y = deckY

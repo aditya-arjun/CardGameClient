@@ -266,9 +266,13 @@ main, #messages-card, .landing-page-card {
   float: left;
 }
 
-#deal-button {
+/* #deal-button {
   width: 50px;
 }
 #reset-button {
   width: 50px;
+} */
+
+.canvas-btn {
+  width: 80px;
 }

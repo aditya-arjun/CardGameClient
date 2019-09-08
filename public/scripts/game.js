@@ -228,7 +228,7 @@ function initializeImages(initialCards) {
     // add card back
     sources.push({
         id: "cardback",
-        src: "images/ace_of_spades.png"
+        src: "images/card_back.png"
     });
     for (let card of initialCards) {
         sources.push({
@@ -365,13 +365,13 @@ function handleFileComplete(initialCards, players) {
     //createPersonalHand(["5D", "3C"]);
 
     let dealButton = new createjs.DOMElement("deal-button");
-    dealButton.x = 47;
+    dealButton.x = 41;
     dealButton.y = 160;
     dealButton.scale = .5;
     stage.addChild(dealButton);
     let resetButton = new createjs.DOMElement("reset-button");
-    resetButton.x = 47;
-    resetButton.y = 170;
+    resetButton.x = 41;
+    resetButton.y = 180;
     resetButton.scale = .5;
     stage.addChild(resetButton);
     document.getElementById("deal-button").addEventListener("click", e => sendDealEvent());

@@ -2,7 +2,7 @@
 
 Presenting the Card Game Client, designed and developed at PennApps XX!
 
-The Card Game Client is a way to play any card game with a standard 54 Card deck remotely by transmitting interactions between all participating players. Players can create a room or join an existing room with a central card deck. Interactions with the central deck, such as a user playing a card are sent to all other users and displayed for them in real time.
+The Card Game Client is a way to play any card game with a standard 54 Card deck remotely by transmitting interactions between all participating players. Players can create a room or join an existing room with a central card deck. Interactions with the central deck (such as a user playing a card) are sent to all other users and displayed for them in real time.
 
 The Card Game Client has a deal function, reset game function, and built-in chat to facilitates easy interaction between users, which allows the client to be flexible and play a wide variety of different games.
 

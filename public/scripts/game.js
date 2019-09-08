@@ -79,43 +79,11 @@ function extendCardName(card) {
     return extendedName;
 }
 
-function getInitialCards() {
-    return [{
-        name: "JC",
-        x: 150,
-        y: 250,
-        faceUp: true,
-        owner: null
-    },
-    {
-        name: "3D",
-        x: 100,
-        y: 200,
-        faceUp: true,
-        owner: null
-    },
-    {
-        name: "4D",
-        x: 100,
-        y: 200,
-        faceUp: true,
-        owner: null
-    },
-    {
-        name: "3C",
-        x: 100,
-        y: 200,
-        faceUp: true,
-        owner: null
-    },
-    {
-        name: "5D",
-        x: 100,
-        y: 200,
-        faceUp: true,
-        owner: null
-    }
-]
+function getInitialCards(board) {
+    let initialCards = []
+    for (let key in board.card_list)
+        initialCards.push(board.card_list[key]);
+    return initialCards;
 }
 
 
@@ -123,8 +91,10 @@ function getInitialCards() {
 //     return "richardg";
 // }
 
-function getAllPlayers() {
-    let players =  ["Richard Guo", "bob", "boy"];
+function getAllPlayers(board) {
+    let players =  [];
+    for (let player in board.player_list)
+        players.push(player[username]);
     return players;
 }
 
@@ -284,12 +254,12 @@ function initializeCards(initialCards) {
     stage.update();
 }
 
-function init() {
+function init(board) {
     stage = new createjs.Stage("canvas");
     preloader = new createjs.LoadQueue();
 
-    let initialCards = getInitialCards();
-    let players = getAllPlayers();
+    let initialCards = getInitialCards(board);
+    let players = getAllPlayers(board);
     let cursorColor = "#32CD32";
     preloader.loadManifest(initializeImages(initialCards));
     preloader.on("complete", e => handleFileComplete(initialCards, players));

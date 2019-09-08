@@ -11,7 +11,7 @@ class Room:
     associated with a game room. 
     """
 
-    def __init__(self, room_id, excluded, numPlayers, originX=0, originY=0, containJokers=False):
+    def __init__(self, room_id, excluded, numPlayers, originX=100, originY=200, containJokers=False):
         self.room_id = room_id
         self.players_list = []
         self.card_list = {}

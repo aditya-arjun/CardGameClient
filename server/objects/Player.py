@@ -3,6 +3,7 @@ import random
 
 class Player:
     def __init__(self, username, userPPUrl):
+        self.session_id = ''
         self.username = username
         self.userPPUrl = userPPUrl
         self.card_list = []

@@ -87,7 +87,29 @@ function getInitialCards() {
         y: 200,
         faceUp: true,
         owner: null
-    }]
+    },
+    {
+        name: "4D",
+        x: 100,
+        y: 200,
+        faceUp: true,
+        owner: null
+    },
+    {
+        name: "3C",
+        x: 100,
+        y: 200,
+        faceUp: true,
+        owner: null
+    },
+    {
+        name: "5D",
+        x: 100,
+        y: 200,
+        faceUp: true,
+        owner: null
+    }
+]
 }
 
 // Connect to socket
@@ -98,7 +120,7 @@ var socket = io.connect("http://" + document.domain + ":" + location.port);
 // }
 
 function getAllPlayers() {
-    let players =  ["Richard Guo", "bob"];
+    let players =  ["Richard Guo", "bob", "boy"];
     return players;
 }
 
@@ -111,24 +133,76 @@ function initializePositions(num, length) {
     return positions;
 }
 
+function createPlayerHands(num) {
+    let hand = new createjs.Container();
+    /*let image = new createjs.Bitmap(preloader.getResult("cardback"));
+    image.scale = .1;
+    image.x = 100;
+    image.y = 100;
+    stage.addChild(image);
+    stage.update();
+    console.log(image);
+    let bounds = image.getBounds();
+    console.log(bounds);
+    let deltaX = bounds.width/2;
+    let deltaY = bounds.height/2;*/
+    let deltaX = 8;
+    let deltaY = 15;
+    for (let i = 0; i < num; i++) {
+        let nextCard = new createjs.Bitmap(preloader.getResult("cardback"));
+        nextCard.x = i*deltaX - (num/2*deltaX);
+        nextCard.y = deltaY;
+        nextCard.scale = .07;
+        hand.addChild(nextCard);
+    }
+    hand.x = 80;
+    hand.y = 60;
+    return hand;
+}
+
 function initializePlayers() {
     let players = getAllPlayers();
-    let positions = initializePositions(players.length, 1000);
-    for (let i = 0; i < players.length; i++) {
-        let player = players[i];
+    let positions = initializePositions(players.length-1, 1000);
+    let idx = 0;
+    for (let player of players) {
+        if (player == username) {
+            continue;
+        }
         let playerContainer = new createjs.Container();
-        playerContainer.x = positions[i];
+        playerContainer.x = positions[idx];
         playerContainer.y = 70;
         let playerShape = new createjs.Shape();
-        playerShape.graphics.beginFill("#FFFFE0").drawEllipse(0, 0, 150, 150);
+        playerShape.graphics.beginFill("#FFFFE0").drawEllipse(0, 0, 100, 100);
+        playerShape.regX = -50;
         playerContainer.addChild(playerShape);
-        let playerName = new createjs.Text(player, "20px Arial");
-        let playerCardCount = new createjs.Text("0", "20px Arial");
-        playerCardCount.y = 30;
-        playerCardCount.name = "count";
-        playerContainer.addChild(playerName, playerCardCount);
+        //let playerName = new createjs.Text(player, "20px Arial");
+        //let playerCardCount = new createjs.Text("0", "20px Arial");
+        //playerCardCount.y = 30;
+        //playerCardCount.name = "count";
+        //playerContainer.addChild(playerName, playerCardCount);
+        //playerContainer.count = 0;
+        let count = 0;
+        let hand = createPlayerHands(count);
+        playerContainer.addChild(hand);
+        //stage.addChild(hand);
+        playerContainer.increment = () => {
+            count++;
+            playerContainer.removeChild(hand);
+            hand = createPlayerHands(count);
+            playerContainer.addChild(hand);
+            stage.update();
+        }
+        playerContainer.decrement = () => {
+            count--;
+            playerContainer.removeChild(hand);
+            hand = createPlayerHands(count);
+            playerContainer.addChild(hand);
+            stage.update();
+        }
+        playerContainer.mouseChildren = false;
         playerDict[player] = playerContainer;
         stage.addChild(playerContainer);
+        idx++;
     }
     stage.update();
 }
@@ -155,9 +229,9 @@ function initializeCards(initialCards) {
         cardContainer.x = card.x;
         cardContainer.y = card.y;
         let image = new createjs.Bitmap(preloader.getResult(card.name));
-        image.scale = .2;
+        image.scale = .15;
         let cardback = new createjs.Bitmap(preloader.getResult("cardback"));
-        cardback.scale = .2;
+        cardback.scale = .15;
         cardContainer.addChild(image);
         let bounds = image.getBounds();
         cardContainer.regX = bounds.width*image.scale/2;
@@ -184,7 +258,6 @@ function initializeCards(initialCards) {
         cardContainer.on("pressup", e => {
             sendBringFront(card.name);
             isDragging = false;
-            currentCard = null;
             
         });
         cardContainer.mouseChildren = false;
@@ -260,25 +333,30 @@ function handleFileComplete(initialCards) {
     initializeCards(initialCards);
 
     let personalArea = new createjs.Shape();
-    personalArea.graphics.beginFill("#FFFFE0").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.7, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.25, 15);
+    personalArea.graphics.beginFill("#FFFFE0").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.75, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.2, 15);
     stage.addChild(personalArea); 
     let players = getAllPlayers();
 
     stage.on("stagemouseup", e => {
         let newOwner = null;
+
         if (currentCard != null) {
             let mouseX = e.stageX / scalingRatio;
             let mouseY = e.stageY / scalingRatio;
             if (personalArea.hitTest(mouseX, mouseY)) {
                 newOwner = username;
             }
+
             for (let player of players) {
                 if (player == username) continue;
-                if (playerDict[player].hitTest(mouseX, mouseY)) {
+                let playerContainer = playerDict[player];
+                let point = playerContainer.globalToLocal(e.stageX, e.stageY);
+                if (playerContainer.hitTest(point.x, point.y)) {
                     newOwner = player;
                 }
             }
-            sendChangeOwner(currentCard, newOwner); 
+            sendChangeOwner(currentCard, newOwner);
+            currentCard = null; 
         }
     });
     stage.update();
@@ -290,11 +368,12 @@ function sendChangeOwner(cardName, newOwner) {
 }
 
 function receiveChangeOwner(cardName, newOwner) {
-    console.log(cardName + "new owner:" + newOwner);
-    if (cardOwners[cardName] != null) {
+    console.log(cardName + ", new owner:" + newOwner);
+    if (cardOwners[cardName] != null && cardOwners[cardName] != username) {
         let owner = cardOwners[cardName];
-        let count = playerDict[owner].getChildByName("count");
-        playerDict[owner].getChildByName("count") = Number(count)-1;
+        playerDict[owner].decrement();
+        //let count = playerDict[owner].getChildByName("count").text;
+        //playerDict[owner].getChildByName("count").text = Number(count)-1;
     }
     cardOwners[cardName] = newOwner;
     if (newOwner == null) {
@@ -302,9 +381,10 @@ function receiveChangeOwner(cardName, newOwner) {
     }
     else if (username != newOwner) {
         cardDict[cardName].visible = false;
-        let owner = newOwner;
-        let count = playerDict[owner].getChildByName("count");
-        playerDict[owner].getChildByName("count") = Number(count)+1;
+        playerDict[newOwner].increment();
+        /*let owner = newOwner;
+        let count = playerDict[owner].getChildByName("count").text;
+        playerDict[owner].getChildByName("count").text = Number(count)+1;*/
     }
     else {
         // what happens if i'm the new owner
@@ -351,7 +431,7 @@ function receiveFlipCard(cardName) {
         nextImage = new createjs.Bitmap(preloader.getResult(cardName));
         cardContainer.faceUp = true;
     }
-    nextImage.scale = .2;
+    nextImage.scale = .15;
     cardContainer.removeAllChildren();
     cardContainer.addChild(nextImage);
     stage.update();

@@ -178,7 +178,7 @@ function initializePlayers(players) {
         playerContainer.x = positions[idx];
         playerContainer.y = 70;
         let playerShape = new createjs.Shape();
-        playerShape.graphics.beginFill("#FFFFE0").drawEllipse(0, 0, 100, 100);
+        playerShape.graphics.beginFill("rgba(2, 136, 209, 0.25)").drawEllipse(0, 0, 100, 100);
         playerShape.regX = -50;
         playerContainer.addChild(playerShape);
         //let playerName = new createjs.Text(player, "20px Arial");
@@ -228,7 +228,7 @@ function initializeImages(initialCards) {
     // add card back
     sources.push({
         id: "cardback",
-        src: "images/ace_of_spades.png"
+        src: "images/card_back.png"
     });
     for (let card of initialCards) {
         sources.push({
@@ -289,10 +289,12 @@ function init() {
     preloader = new createjs.LoadQueue();
 
     let initialCards = getInitialCards();
-    preloader.loadManifest(initializeImages(initialCards));
-    preloader.on("complete", e => handleFileComplete(initialCards));
-    username = getUserName();
     let players = getAllPlayers();
+    let cursorColor = "#32CD32";
+    preloader.loadManifest(initializeImages(initialCards));
+    preloader.on("complete", e => handleFileComplete(initialCards, players));
+    username = getUserName();
+    
     initializePlayers(players);
     initializeCursors(players);
 
@@ -348,13 +350,13 @@ function init() {
     createjs.Ticker.addEventListener("tick", stage);
 }
 
-function handleFileComplete(initialCards) {
+function handleFileComplete(initialCards, players) {
     initializeCards(initialCards);
 
     let personalArea = new createjs.Shape();
-    personalArea.graphics.beginFill("#FFFFE0").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.75, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.2, 15);
+    personalArea.graphics.beginFill("rgba(2, 136, 209, 0.25)").drawRoundRect(CANVAS_WIDTH*.1, CANVAS_HEIGHT*.75, CANVAS_WIDTH*.8, CANVAS_HEIGHT*.2, 15);
     stage.addChild(personalArea); 
-    let players = getAllPlayers();
+    //let players = getAllPlayers();
 /*
     let deckArea = new createjs.Shape();
     deckArea.graphics.beginFill("#FFFFE0").drawRoundRect(300, 300, 90, 130, 10);
@@ -363,13 +365,13 @@ function handleFileComplete(initialCards) {
     //createPersonalHand(["5D", "3C"]);
 
     let dealButton = new createjs.DOMElement("deal-button");
-    dealButton.x = 47;
+    dealButton.x = 41;
     dealButton.y = 160;
     dealButton.scale = .5;
     stage.addChild(dealButton);
     let resetButton = new createjs.DOMElement("reset-button");
-    resetButton.x = 47;
-    resetButton.y = 170;
+    resetButton.x = 41;
+    resetButton.y = 180;
     resetButton.scale = .5;
     stage.addChild(resetButton);
     document.getElementById("deal-button").addEventListener("click", e => sendDealEvent());
@@ -406,7 +408,7 @@ function handleFileComplete(initialCards) {
     });
 
     
-    stage.addChild(cursor);
+    
     stage.on("stagemousemove", e => {
         let mouseX = e.stageX / scalingRatio;
         let mouseY = e.stageY / scalingRatio;
@@ -446,7 +448,7 @@ function sendResetEvent() {
 
 }
 
-function sendChangeOwner(name, newOwner) {
+function sendChangeOwner(cardName, newOwner) {
     socket.emit('transfer',{
         "author": sessionId,
         'cardName': cardName,

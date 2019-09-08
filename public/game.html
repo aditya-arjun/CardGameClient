@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="Game Page">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Friendly Chat</title>
+  <title>Card Game Client</title>
 
   <!-- Disable tap highlight on IE -->
   <meta name="msapplication-tap-highlight" content="no">
@@ -38,7 +38,7 @@
     <header id="top-header" class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
       <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
         <div class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-          <h3><!-- <i class="material-icons">chat_bubble_outline</i> --> Cards!</h3>
+          <h3><!-- <i class="material-icons">chat_bubble_outline</i> --> Card Game Client</h3>
         </div>
         <div id="user-container">
           <div hidden id="user-pic"></div>
@@ -64,8 +64,8 @@
     </div>
 
     <canvas id="canvas" width="1200" height="750"></canvas>
-    <button id="deal-button">Deal</button>
-    <button id="reset-button">Reset</button>
+    <button id="deal-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect canvas-btn">Deal</button>
+    <button id="reset-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect canvas-btn">Reset</button>
     <!-- Messages container -->
     <div id="messages-card" class="mdl-card mdl-shadow--2dp mdl-cell--bottom">
       <div class="mdl-card__supporting-text mdl-color-text--grey-600">

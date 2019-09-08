@@ -319,7 +319,7 @@ function receiveChangeOwner(cardName, newOwner) {
 // Server commands
 function sendBringFront(cardName) {
     // @aditya change this
-    socket.emit('cursor', {
+    socket.emit('card_front', {
         "author": sessionId,
         "cardName": cardName
     });
@@ -390,12 +390,12 @@ socket.on('connect', function() {
 
 socket.on('transfer', function(msg) {
     if (!("author" in msg) || (msg["author"] != sessionId))
-        receiveFlipCard(msg['cardName'],msg['newOwner']);
+        receiveChangeOwner(msg['cardName'],msg['newOwner']);
 });
 
 socket.on('card_front', function(msg) {
     if (!("author" in msg) || (msg["author"] != sessionId))
-        receiveFlipCard(msg['cardName']);
+        receiveBringFront(msg['cardName']);
 });
 
 socket.on('card_flip', function(msg) {

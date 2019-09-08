@@ -1,5 +1,6 @@
 :root {
   --color-img-layer: rgba(108, 117, 125, 0.75);
+  --color-canvas-bar: rgba(2, 136, 209, 0.75);
 }
 
 html, body {

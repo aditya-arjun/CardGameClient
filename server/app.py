@@ -48,7 +48,7 @@ def on_create(data):
     # print(data['excluded']) # array of excluded cards
     # print(data['numPlayers']) # integer
     game_id = generate_room_id()
-    room = Room(room_id=game_id, settings=data['settings'])
+    room = Room(room_id=game_id, excluded=data['excluded'])
     rooms[game_id] = room
 
 @socketio.on('createExtra')

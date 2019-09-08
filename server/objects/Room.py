@@ -25,6 +25,9 @@ class Room:
         for card_name,card_suit in card_ids:
             card = Card(card_name+card_suit,originX,originY,False)
             self.card_list[card.name] = card
+
+        for card_id in excluded:
+            self.card_list.pop(card_id, None)
         
 
     def enter_room(self, player):

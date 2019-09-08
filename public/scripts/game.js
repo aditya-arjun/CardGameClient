@@ -6,7 +6,8 @@ let scalingRatio = 1;
 // cardDict
 let cardDict = {};
 let playerDict = {};
-let cardOwners = {}
+let cardOwners = {};
+let sessionId;
 let username;
 let currentCard = null;
 let personalHand = [];
@@ -24,12 +25,11 @@ const PIXEL_RATIO = (function () {
     return pRatio;
 })();
 
-// Connect to socket
-// var socket = io();
-
 // constants regarding canvas size
 const CANVAS_WIDTH = 1200;
 const CANVAS_HEIGHT = 750;
+
+var socket = io();
 
 function extendCardName(card) {
     if (card == "JB") {
@@ -390,6 +390,7 @@ function movePersonalToIndex(card, index) {
 
 function sendChangeOwner(cardName, newOwner) {
     socket.emit('transfer',{
+        "author": sessionId,
         'cardName': cardName,
         'newOwner': newOwner
     });
@@ -433,22 +434,29 @@ function receiveChangeOwner(cardName, newOwner) {
 // Server commands
 function sendBringFront(cardName) {
     // @aditya change this
-    // socket.emit('cursor', {data: cardName});
+    socket.emit('card_front', {
+        "author": sessionId,
+        "cardName": cardName
+    });
     receiveBringFront(cardName);
 }
 
 function sendFlipCard(cardName) {
     // @aditya change this
-    // socket.emit('card_flip', {'data': cardName});
+    socket.emit('card_flip', {
+        "author": sessionId,
+        'cardName': cardName
+    });
     receiveFlipCard(cardName);
 }
 
 function sendMoveCard(cardName, newX, newY) {
     // @aditya change this
-    // socket.emit('card_move', {
-    //     "cardName":   cardName, 
-    //     "newX":       newX, 
-    //     "newY":       newY});
+    socket.emit('card_move', {
+        "author":     sessionId,
+        "cardName":   cardName, 
+        "newX":       newX, 
+        "newY":       newY});
     receiveMoveCard(cardName, newX, newY);
 }
 
@@ -483,3 +491,34 @@ function receiveMoveCard(cardName, newX, newY) {
     cardContainer.y = newY;
     stage.update();
 }
+
+// Insert some listeners
+
+socket.on('connect', function() {
+    socket.emit('generate_user_id');
+    socket.on('generate_user_id', function(msg) {
+        sessionId = msg['data'];
+    });
+    socket.emit('createExtra',{'settings': null});
+    socket.emit('join_room',{'room': 'A'})
+});
+
+socket.on('transfer', function(msg) {
+    if (!("author" in msg) || (msg["author"] != sessionId))
+        receiveChangeOwner(msg['cardName'],msg['newOwner']);
+});
+
+socket.on('card_front', function(msg) {
+    if (!("author" in msg) || (msg["author"] != sessionId))
+        receiveBringFront(msg['cardName']);
+});
+
+socket.on('card_flip', function(msg) {
+    if (!("author" in msg) || (msg["author"] != sessionId))
+        receiveFlipCard(msg['cardName']);
+});
+
+socket.on('card_move', function(msg) {
+    if (!("author" in msg) || (msg["author"] != sessionId))
+        receiveMoveCard(msg['cardName'], msg['newX'], msg['newY']);
+});

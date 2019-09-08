@@ -31,8 +31,6 @@ const PIXEL_RATIO = (function () {
 const CANVAS_WIDTH = 1200;
 const CANVAS_HEIGHT = 750;
 
-var socket = io();
-
 function extendCardName(card) {
     if (card == "JB") {
         return "black_joker";

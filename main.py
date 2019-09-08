@@ -10,14 +10,12 @@ app = Flask(__name__, static_url_path = '', static_folder='public', template_fol
 socketio = SocketIO(app)
 rooms = {}
 
-@app.route('/')
+@app.route('/',methods=['GET','POST'])
 def index():
     return render_template('index.html')
 
-@app.route('/game')
+@app.route('/game',methods=['GET','POST'])
 def game():
-    if 'room_id' not in session:
-        return redirect('index.html')
     return render_template('game.html')
 
 @app.route('/game/<string:room_id>')
@@ -62,21 +60,21 @@ def on_join(data):
 
 @socketio.on('check_room')
 def on_check():
-    room = get_room(session)
+    room = get_room()
     if len(room.players_list) == int(room.numPlayers):
         print(type(room.toJSON()))
         emit('start', {'data':room.toJSON()}, broadcast=True)
     print(len(room.players_list))
     print(room.numPlayers)
 
-def get_room(session):
+def get_room():
     return rooms[session['room_id']]
 
 # Stuff with the commands
 
 @socketio.on('cursor')
 def cursor_move(msg):
-    room = get_room(session)
+    room = get_room()
     for player in room.players_list:
         if player.session_id is msg['author']:
             player.move_cursor(msg['cursor_x'],msg['cursor_y'])
@@ -85,7 +83,7 @@ def cursor_move(msg):
 
 @socketio.on('card_move')
 def card_move(msg):
-    room = get_room(session)
+    room = get_room()
     card = room.get_card(msg['cardName'])
     card.set_position(msg['newX'], msg['newY'])
     room.update_card(card)
@@ -94,7 +92,7 @@ def card_move(msg):
 
 @socketio.on('transfer')
 def transfer(msg):
-    room = get_room(session)
+    room = get_room()
     card = room.get_card(msg['cardName'])
     card.set_owner(msg['newOwner'])
     room.update_card(card)
@@ -117,7 +115,7 @@ def on_reset(data):
     deckX = 100
     deckY = 100
 
-    room = get_room(session)
+    room = get_room()
     for card in room.get_cards_list():
         card.x = deckX
         card.y = deckY
@@ -134,7 +132,7 @@ def on_reset(data):
 @socketio.on('deal')
 def on_deal(data):
     ''' Deals cards to players and sends info '''
-    room = get_room(session)
+    room = get_room()
 
     cards = room.card_list.items()
     random.shuffle(cards)

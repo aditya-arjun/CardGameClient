@@ -47,6 +47,11 @@ def on_create_game(data):
     print(data['excluded']) # array of excluded cards
     print(data['numPlayers']) # integer
 
+@socketio.on('join-game')
+def on_create_game(data):
+    print(data)
+    print(data['roomCode']) # string
+
 @socketio.on('create')
 def on_create(data):
     ''' Creates game lobby '''

@@ -29,8 +29,6 @@ for (let i = 0; i < cards.length; i++) {
 	elt = document.getElementById(cards[i]).addEventListener('click', test, false);
 }
 
-
-
 var createFormElement = document.getElementById('create-form');
 var numPlayersInputElement = document.getElementById('num-players')
 var createSubmitButtonElement = document.getElementById('create-submit');

@@ -6,6 +6,10 @@ The Card Game Client is a way to play any card game with a standard 54 Card deck
 
 The Card Game Client has a deal function, reset game function, and built-in chat to facilitates easy interaction between users, which allows the client to be flexible and play a wide variety of different games.
 
+Created and demoed at PennApps XX (https://devpost.com/software/card-game-client).
+
+[Presentation](https://docs.google.com/presentation/d/14l1-jkMfDBeRZ8H-gHlRFV8CMa_ai1_ZZat5Ec86Iic/edit?usp=sharing)
+
 # Development/Setup Instructions
 
 `pip install -r requirements.txt`

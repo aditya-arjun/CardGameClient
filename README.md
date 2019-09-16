@@ -9,6 +9,7 @@ The Card Game Client has a deal function, reset game function, and built-in chat
 # Development/Setup Instructions
 
 `pip install -r requirements.txt`
+
 `python main.py`
 
 Travel to http://localhost:5000 to see the initial landing game if deployed in this way.
